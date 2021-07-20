@@ -23,7 +23,7 @@ Advanced linear progress indicator like Native Android Progress Bar
 You should ensure that you add the router as a dependency in your flutter project.
 ```yaml
 dependencies:
- linear_progress_bar: "^1.0.0"
+ linear_progress_bar: "^1.0.0+3"
 ```
 
 You should then run `flutter packages upgrade` or update your packages in IntelliJ.
@@ -71,7 +71,7 @@ Complete example
 Widget build(BuildContext context) {
   return Scaffold(
     appBar: new AppBar(
-      title: new Text("Linear Percent Indicators"),
+      title: new Text("Linear Progress Bar"),
     ),
     body: Center(
       child: LinearProgressBar(
