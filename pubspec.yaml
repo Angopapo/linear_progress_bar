@@ -1,0 +1,19 @@
+name: linear_progress_bar
+description: Flutter and Dart advanced linear progress indicator like Native Android Progress Bar
+version: 1.0.0+1
+homepage: https://www.angopapo.com
+repository: https://github.com/Angopapo/linear_progress_bar
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
