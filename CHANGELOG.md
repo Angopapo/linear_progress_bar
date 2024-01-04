@@ -1,5 +1,5 @@
-# 1.0.0
-- Initial release
+# 1.1.1 (04/01/2023)
+- Updated Flutter and Dart version
 
 # 1.0.0+1 - 1.0.0+3
 - Just info updates
@@ -10,3 +10,6 @@ Added Dots progress bar
 - Added dotsActiveSize
 - Added dotsInactiveSize
 - Added dotsSpacing
+
+# 1.0.0
+- Initial release

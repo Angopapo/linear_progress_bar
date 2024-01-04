@@ -28,7 +28,7 @@ Advanced linear progress indicator like Native Android Progress Bar
 You should ensure that you add the router as a dependency in your flutter project.
 ```yaml
 dependencies:
- linear_progress_bar: "^1.1.0"
+ linear_progress_bar: "^1.1.1"
 ```
 
 You should then run `flutter packages upgrade` or update your packages in IntelliJ.
@@ -47,7 +47,7 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 
 Basic Widget usage with Linear progress
 ```dart
-new LinearProgressBar(
+ LinearProgressBar(
       maxSteps: 6,
       progressType: LinearProgressBar.progressTypeLinear, // Use Linear progress
       currentStep: 1,
@@ -58,7 +58,7 @@ new LinearProgressBar(
 
 NEW! Basic Widget usage with Linear Dots progress
 ```dart
-new LinearProgressBar(
+ LinearProgressBar(
       maxSteps: 6,
       progressType: LinearProgressBar.progressTypeDots, // Use Dots progress
       currentStep: 1,
@@ -69,18 +69,18 @@ new LinearProgressBar(
 
 Advanced Widget usage with Linear Progress
 ```dart
-new LinearProgressBar(
+ LinearProgressBar(
       maxSteps: 9,
       progressType: LinearProgressBar.progressTypeLinear,
       currentStep: currentStep,
       progressColor: kPrimaryColor,
-      backgroundColor: kColorsGrey400,
+      backgroundColor: kColorsGrey400
   );
 ```
 
 NEW! Advanced Widget usage
 ```dart
-new LinearProgressBar(
+ LinearProgressBar(
       maxSteps: 9,
       progressType: LinearProgressBar.progressTypeDots,
       currentStep: currentStep,
