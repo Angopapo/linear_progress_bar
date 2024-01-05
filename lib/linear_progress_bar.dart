@@ -51,9 +51,6 @@ class LinearProgressBar extends StatelessWidget {
       spacing: dotsSpacing!,
       activeSize: Size.square(dotsActiveSize),
       size: Size.square(dotsInactiveSize),
-      //activeShape: RoundedRectangleBorder(),
-      //shape: const Border(),
-      //activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
     );
 
     double value = 1;

@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:linear_progress_bar/utils/dots_decorator.dart';
 import 'package:flutter/material.dart';
