@@ -1,8 +1,8 @@
 library linear_progress_bar;
 
 import 'package:flutter/material.dart';
-import 'ui/dots_indicator.dart';
 
+import 'ui/dots_indicator.dart';
 import 'utils/dots_decorator.dart';
 
 class LinearProgressBar extends StatelessWidget {
@@ -15,12 +15,11 @@ class LinearProgressBar extends StatelessWidget {
   final double? minHeight;
   final int? progressType;
   final Animation<Color?>? valueColor;
-
+  final BorderRadiusGeometry? borderRadius;
   final Axis? dotsAxis;
   final EdgeInsets? dotsSpacing;
   final double dotsActiveSize;
   final double dotsInactiveSize;
-
 
   const LinearProgressBar({
     Key? key,
@@ -37,6 +36,7 @@ class LinearProgressBar extends StatelessWidget {
     this.dotsSpacing = EdgeInsets.zero,
     this.dotsActiveSize = 8,
     this.dotsInactiveSize = 8,
+    this.borderRadius,
   }) : super(key: key);
 
   static final int progressTypeLinear = 1;
@@ -44,7 +44,6 @@ class LinearProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final DotsDecorator decorator = DotsDecorator(
       activeColor: progressColor!,
       color: backgroundColor!,
@@ -56,14 +55,13 @@ class LinearProgressBar extends StatelessWidget {
     double value = 1;
     double current = 1;
 
-    if(maxSteps != null){
-
-      value = 1/maxSteps!;
+    if (maxSteps != null) {
+      value = 1 / maxSteps!;
     } else {
-      value = 1/1;
+      value = 1 / 1;
     }
 
-    if(currentStep != null){
+    if (currentStep != null) {
       current = value * currentStep!;
     } else {
       current = value * 1;
@@ -72,10 +70,8 @@ class LinearProgressBar extends StatelessWidget {
     return typeChooser(current, currentStep!.ceilToDouble(), decorator);
   }
 
-  Widget typeChooser(double current, double dotsStep, DotsDecorator decorator){
-
-    if(progressType == progressTypeDots){
-
+  Widget typeChooser(double current, double dotsStep, DotsDecorator decorator) {
+    if (progressType == progressTypeDots) {
       return DotsIndicator(
         dotsCount: maxSteps!,
         position: dotsStep,
@@ -85,9 +81,7 @@ class LinearProgressBar extends StatelessWidget {
           //setState(() => _currentPosition = pos);
         },
       );
-
-    } else if(progressType == progressTypeLinear){
-
+    } else if (progressType == progressTypeLinear) {
       return LinearProgressIndicator(
         value: current,
         backgroundColor: backgroundColor,
@@ -96,8 +90,8 @@ class LinearProgressBar extends StatelessWidget {
         semanticsValue: semanticsValue,
         minHeight: minHeight,
         valueColor: valueColor,
+        borderRadius: borderRadius ?? BorderRadius.zero,
       );
-
     }
 
     return LinearProgressIndicator(
@@ -108,6 +102,7 @@ class LinearProgressBar extends StatelessWidget {
       semanticsValue: semanticsValue,
       minHeight: minHeight,
       valueColor: valueColor,
+      borderRadius: borderRadius ?? BorderRadius.zero,
     );
   }
 }
