@@ -1,7 +1,4 @@
-library linear_progress_bar;
-
 import 'package:flutter/material.dart';
-
 import 'ui/dots_indicator.dart';
 import 'utils/dots_decorator.dart';
 
@@ -17,17 +14,17 @@ class LinearProgressBar extends StatelessWidget {
   final Animation<Color?>? valueColor;
   final BorderRadiusGeometry? borderRadius;
   final Axis? dotsAxis;
-  final EdgeInsets? dotsSpacing;
+  final EdgeInsets dotsSpacing;
   final double dotsActiveSize;
   final double dotsInactiveSize;
 
   const LinearProgressBar({
-    Key? key,
-    this.progressColor,
-    this.backgroundColor,
-    this.maxSteps,
-    this.currentStep,
-    this.minHeight,
+    super.key,
+    this.progressColor = Colors.red,
+    this.backgroundColor = Colors.white,
+    this.maxSteps = 1,
+    this.currentStep = 0,
+    this.minHeight = 10,
     this.semanticsLabel,
     this.semanticsValue,
     this.valueColor,
@@ -37,7 +34,7 @@ class LinearProgressBar extends StatelessWidget {
     this.dotsActiveSize = 8,
     this.dotsInactiveSize = 8,
     this.borderRadius,
-  }) : super(key: key);
+  });
 
   static final int progressTypeLinear = 1;
   static final int progressTypeDots = 2;
@@ -45,9 +42,9 @@ class LinearProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DotsDecorator decorator = DotsDecorator(
-      activeColor: progressColor!,
-      color: backgroundColor!,
-      spacing: dotsSpacing!,
+      activeColor: progressColor,
+      color: backgroundColor,
+      spacing: dotsSpacing,
       activeSize: Size.square(dotsActiveSize),
       size: Size.square(dotsInactiveSize),
     );

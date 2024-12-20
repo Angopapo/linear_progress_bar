@@ -5,8 +5,8 @@ const EdgeInsets kDefaultSpacing = EdgeInsets.all(6.0);
 const ShapeBorder kDefaultShape = CircleBorder();
 
 class DotsDecorator {
-  final Color color;
-  final Color activeColor;
+  final Color? color;
+  final Color? activeColor;
   final Size size;
   final Size activeSize;
   final ShapeBorder shape;
@@ -14,8 +14,8 @@ class DotsDecorator {
   final EdgeInsets spacing;
 
   const DotsDecorator({
-    this.color = Colors.grey,
-    this.activeColor = Colors.lightBlue,
+    this.color,
+    this.activeColor,
     this.size = kDefaultSize,
     this.activeSize = kDefaultSize,
     this.shape = kDefaultShape,
