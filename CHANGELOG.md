@@ -1,3 +1,11 @@
+# 1.1.3 (24/12/2024)
+- Updated Flutter and Dart version
+- Added BorderRadius in ProgressTypeLinear
+
+# 1.1.2 (13/07/2024)
+- Updated Flutter and Dart version
+- Added BorderRadius in ProgressTypeLinear
+
 # 1.1.1 (04/01/2023)
 - Updated Flutter and Dart version
 

@@ -10,7 +10,7 @@ Advanced linear progress indicator like Native Android Progress Bar
 ## Features
 
 - Linear progress bar
-- Dots progress bar (NEW!)
+- Dots progress bar
 - Set max progress value
 - Set current progress value
 - Color animation 
@@ -28,7 +28,7 @@ Advanced linear progress indicator like Native Android Progress Bar
 You should ensure that you add the router as a dependency in your flutter project.
 ```yaml
 dependencies:
- linear_progress_bar: "^1.1.1"
+ linear_progress_bar: "^1.1.3"
 ```
 
 You should then run `flutter packages upgrade` or update your packages in IntelliJ.
@@ -53,6 +53,7 @@ Basic Widget usage with Linear progress
       currentStep: 1,
       progressColor: Colors.red,
       backgroundColor: Colors.grey,
+      borderRadius: BorderRadius.circular(10), //  NEW
     )
 ```
 
@@ -74,7 +75,8 @@ Advanced Widget usage with Linear Progress
       progressType: LinearProgressBar.progressTypeLinear,
       currentStep: currentStep,
       progressColor: kPrimaryColor,
-      backgroundColor: kColorsGrey400
+      backgroundColor: kColorsGrey400,
+      borderRadius: BorderRadius.circular(10), //  NEW
   );
 ```
 
@@ -113,6 +115,7 @@ Widget build(BuildContext context) {
         semanticsLabel: "Label",
         semanticsValue: "Value",
         minHeight: 10,
+        borderRadius: BorderRadius.circular(10), //  NEW
       ),
     ),
   );
