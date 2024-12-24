@@ -1,9 +1,8 @@
 import 'dart:math';
-
-import 'package:linear_progress_bar/utils/dots_decorator.dart';
 import 'package:flutter/material.dart';
+import '../utils/dots_decorator.dart';
 
-typedef void OnTap(double position);
+typedef OnTap = void Function(double position);
 
 class DotsIndicator extends StatelessWidget {
   final int dotsCount;
@@ -16,7 +15,7 @@ class DotsIndicator extends StatelessWidget {
   final MainAxisAlignment mainAxisAlignment;
 
   const DotsIndicator({
-    Key? key,
+    super.key,
     required this.dotsCount,
     this.position = 0.0,
     this.decorator = const DotsDecorator(),
@@ -30,8 +29,7 @@ class DotsIndicator extends StatelessWidget {
         assert(
           position < dotsCount,
           "Position must be inferior than dotsCount",
-        ),
-        super(key: key);
+        );
 
   Widget _buildDot(int index) {
     final state = min(1.0, (position - index).abs());
