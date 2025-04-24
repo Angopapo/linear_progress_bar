@@ -1,3 +1,8 @@
+# 1.2.0 (24/04/2025)
+- Updated Flutter and Dart version
+- Improved the code and features
+- Added Titled progress bar
+
 # 1.1.3 (24/12/2024)
 - Updated Flutter and Dart version
 - Fixed null problem
