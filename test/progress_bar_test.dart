@@ -46,7 +46,7 @@ void main() {
       });
 
       test('should return 0 when currentStep is 0', () {
-        const bar = LinearProgressBar(maxSteps: 10, currentStep: 0);
+        const bar = LinearProgressBar(maxSteps: 10);
         expect(bar.progressValue, 0.0);
       });
 
@@ -69,7 +69,7 @@ void main() {
       });
 
       test('should return 0 for no progress', () {
-        const bar = LinearProgressBar(maxSteps: 100, currentStep: 0);
+        const bar = LinearProgressBar(maxSteps: 100);
         expect(bar.progressPercentage, 0.0);
       });
 
@@ -99,7 +99,6 @@ void main() {
               body: LinearProgressBar(
                 maxSteps: 10,
                 currentStep: 5,
-                progressType: ProgressType.linear,
               ),
             ),
           ),
@@ -132,7 +131,6 @@ void main() {
               body: LinearProgressBar(
                 maxSteps: 10,
                 currentStep: 5,
-                progressType: ProgressType.linear,
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -147,13 +145,12 @@ void main() {
 
       testWidgets('should render gradient progress bar', (tester) async {
         await tester.pumpWidget(
-          MaterialApp(
+          const MaterialApp(
             home: Scaffold(
               body: LinearProgressBar(
                 maxSteps: 10,
                 currentStep: 5,
-                progressType: ProgressType.linear,
-                progressGradient: const LinearGradient(
+                progressGradient: LinearGradient(
                   colors: [Colors.blue, Colors.purple],
                 ),
               ),
@@ -183,14 +180,14 @@ void main() {
 
     group('progressValue', () {
       test('should calculate correct progress value', () {
-        const bar = TitledProgressBar(maxSteps: 100, currentStep: 50);
+        const bar = TitledProgressBar(currentStep: 50);
         expect(bar.progressValue, 0.5);
       });
     });
 
     group('progressPercentage', () {
       test('should return correct percentage', () {
-        const bar = TitledProgressBar(maxSteps: 100, currentStep: 75);
+        const bar = TitledProgressBar(currentStep: 75);
         expect(bar.progressPercentage, 75.0);
       });
     });
@@ -201,7 +198,6 @@ void main() {
           const MaterialApp(
             home: Scaffold(
               body: TitledProgressBar(
-                maxSteps: 100,
                 currentStep: 50,
                 label: 'Loading...',
               ),
@@ -218,7 +214,6 @@ void main() {
           const MaterialApp(
             home: Scaffold(
               body: TitledProgressBar(
-                maxSteps: 100,
                 currentStep: 75,
                 labelType: LabelType.percentage,
               ),
@@ -234,7 +229,6 @@ void main() {
           const MaterialApp(
             home: Scaffold(
               body: TitledProgressBar(
-                maxSteps: 100,
                 currentStep: 50,
                 labelType: LabelType.stepCount,
               ),
@@ -250,7 +244,6 @@ void main() {
           const MaterialApp(
             home: Scaffold(
               body: TitledProgressBar(
-                maxSteps: 100,
                 currentStep: 50,
                 labelType: LabelType.percentage,
                 labelPosition: LabelPosition.top,
@@ -268,7 +261,6 @@ void main() {
           const MaterialApp(
             home: Scaffold(
               body: TitledProgressBar(
-                maxSteps: 100,
                 currentStep: 50,
                 label: 'Test',
                 labelColor: Colors.blue,
@@ -458,6 +450,13 @@ void main() {
       expect(LabelPosition.values, contains(LabelPosition.top));
       expect(LabelPosition.values, contains(LabelPosition.bottom));
       expect(LabelPosition.values.length, 5);
+    });
+  });
+
+  group('Static field backward compatibility', () {
+    test('should access deprecated static fields', () {
+      expect(LinearProgressBar.progressTypeLinear, 1);
+      expect(LinearProgressBar.progressTypeDots, 2);
     });
   });
 }

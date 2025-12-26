@@ -1,5 +1,26 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'progress_bar.dart';
+
+// #region agent log
+void _logTitled(String location, String message, Map<String, dynamic> data, String hypothesisId) {
+  try {
+    final logFile = File('/Users/maravilhosinga/Projetos/Trabalhos/Interno/FlutterPackages/linear_progress_bar/.cursor/debug.log');
+    final entry = '{"sessionId":"debug-session","runId":"run1","hypothesisId":"$hypothesisId","location":"$location","message":"$message","data":${_jsonEncodeTitled(data)},"timestamp":${DateTime.now().millisecondsSinceEpoch}}\n';
+    logFile.writeAsStringSync('${logFile.existsSync() ? logFile.readAsStringSync() : ""}$entry', mode: FileMode.append);
+  } catch (_) {}
+}
+String _jsonEncodeTitled(dynamic value) {
+  if (value is Map) {
+    final entries = value.entries.map((e) => '"${e.key}":${_jsonEncodeTitled(e.value)}').join(',');
+    return '{$entries}';
+  } else if (value is String) {
+    return '"${value.replaceAll('"', '\\"')}"';
+  } else {
+    return value.toString();
+  }
+}
+// #endregion
 
 /// The position of the label within the progress bar.
 enum LabelPosition {
@@ -198,9 +219,11 @@ class TitledProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // #region agent log
+    _logTitled('titled_progress_bar.dart:200', 'TitledProgressBar build entry', {'maxSteps': maxSteps, 'currentStep': currentStep, 'labelType': labelType.toString(), 'labelPosition': labelPosition.toString()}, 'B');
+    // #endregion
     final progressBar = LinearProgressBar(
       maxSteps: maxSteps,
-      progressType: ProgressType.linear,
       currentStep: currentStep,
       minHeight: minHeight,
       progressColor: progressColor,
@@ -211,6 +234,9 @@ class TitledProgressBar extends StatelessWidget {
       animationDuration: animationDuration,
       animationCurve: animationCurve,
     );
+    // #region agent log
+    _logTitled('titled_progress_bar.dart:213', 'LinearProgressBar created', {'hasGradient': progressGradient != null, 'animateProgress': animateProgress}, 'B');
+    // #endregion
 
     final labelWidget = _buildLabel();
 

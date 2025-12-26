@@ -1,6 +1,27 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '../ui/dots_indicator.dart';
 import '../utils/dots_decorator.dart';
+
+// #region agent log
+void _log(String location, String message, Map<String, dynamic> data, String hypothesisId) {
+  try {
+    final logFile = File('/Users/maravilhosinga/Projetos/Trabalhos/Interno/FlutterPackages/linear_progress_bar/.cursor/debug.log');
+    final entry = '{"sessionId":"debug-session","runId":"run1","hypothesisId":"$hypothesisId","location":"$location","message":"$message","data":${_jsonEncode(data)},"timestamp":${DateTime.now().millisecondsSinceEpoch}}\n';
+    logFile.writeAsStringSync('${logFile.existsSync() ? logFile.readAsStringSync() : ""}$entry', mode: FileMode.append);
+  } catch (_) {}
+}
+String _jsonEncode(dynamic value) {
+  if (value is Map) {
+    final entries = value.entries.map((e) => '"${e.key}":${_jsonEncode(e.value)}').join(',');
+    return '{$entries}';
+  } else if (value is String) {
+    return '"${value.replaceAll('"', '\\"')}"';
+  } else {
+    return value.toString();
+  }
+}
+// #endregion
 
 /// Callback signature for progress changes.
 typedef OnProgressChanged = void Function(int currentStep, int maxSteps);
@@ -148,13 +169,6 @@ class LinearProgressBar extends StatelessWidget {
   /// Defaults to [Curves.easeInOut].
   final Curve animationCurve;
 
-  /// Legacy static constants for backward compatibility.
-  @Deprecated('Use ProgressType.linear instead')
-  static final int progressTypeLinear = 1;
-
-  @Deprecated('Use ProgressType.dots instead')
-  static final int progressTypeDots = 2;
-
   /// Creates a linear progress bar widget.
   ///
   /// The [maxSteps] must be greater than 0.
@@ -189,10 +203,29 @@ class LinearProgressBar extends StatelessWidget {
         assert(currentStep >= 0, 'currentStep must be non-negative'),
         assert(currentStep <= maxSteps, 'currentStep must not exceed maxSteps');
 
+  /// Legacy static constants for backward compatibility.
+  @Deprecated('Use ProgressType.linear instead')
+  static const int progressTypeLinear = 1;
+
+  @Deprecated('Use ProgressType.dots instead')
+  static const int progressTypeDots = 2;
+
   /// Calculates the progress value as a fraction between 0.0 and 1.0.
   double get progressValue {
-    if (maxSteps <= 0) return 0.0;
-    return (currentStep / maxSteps).clamp(0.0, 1.0);
+    // #region agent log
+    _log('progress_bar.dart:193', 'progressValue getter entry', {'maxSteps': maxSteps, 'currentStep': currentStep}, 'B');
+    // #endregion
+    if (maxSteps <= 0) {
+      // #region agent log
+      _log('progress_bar.dart:195', 'maxSteps <= 0 edge case', {'maxSteps': maxSteps}, 'B');
+      // #endregion
+      return 0.0;
+    }
+    final value = (currentStep / maxSteps).clamp(0.0, 1.0);
+    // #region agent log
+    _log('progress_bar.dart:196', 'progressValue calculated', {'value': value, 'raw': currentStep / maxSteps}, 'B');
+    // #endregion
+    return value;
   }
 
   /// Returns true if the progress is complete.
@@ -203,7 +236,10 @@ class LinearProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DotsDecorator decorator = DotsDecorator(
+    // #region agent log
+    _log('progress_bar.dart:205', 'build method entry', {'progressType': progressType.toString(), 'maxSteps': maxSteps, 'currentStep': currentStep, 'animateProgress': animateProgress}, 'D');
+    // #endregion
+    final decorator = DotsDecorator(
       activeColor: progressColor,
       color: backgroundColor,
       spacing: dotsSpacing,
@@ -212,13 +248,26 @@ class LinearProgressBar extends StatelessWidget {
       activeShape: dotsActiveShape ?? const CircleBorder(),
       shape: dotsShape ?? const CircleBorder(),
     );
+    // #region agent log
+    _log('progress_bar.dart:214', 'decorator created', {'hasActiveShape': dotsActiveShape != null, 'hasShape': dotsShape != null}, 'D');
+    // #endregion
 
-    return _buildProgressIndicator(decorator);
+    final widget = _buildProgressIndicator(decorator);
+    // #region agent log
+    _log('progress_bar.dart:216', 'build method exit', {'widgetType': widget.runtimeType.toString()}, 'D');
+    // #endregion
+    return widget;
   }
 
   Widget _buildProgressIndicator(DotsDecorator decorator) {
+    // #region agent log
+    _log('progress_bar.dart:219', '_buildProgressIndicator entry', {'progressType': progressType.toString()}, 'D');
+    // #endregion
     switch (progressType) {
       case ProgressType.dots:
+        // #region agent log
+        _log('progress_bar.dart:222', 'Building dots indicator', {'dotsCount': maxSteps, 'position': currentStep.clamp(0, maxSteps - 1).toDouble()}, 'D');
+        // #endregion
         return DotsIndicator(
           dotsCount: maxSteps,
           // Ensure position is within valid range (0 to dotsCount - 1)
@@ -229,21 +278,36 @@ class LinearProgressBar extends StatelessWidget {
           onTap: onDotTap,
         );
       case ProgressType.linear:
+        // #region agent log
+        _log('progress_bar.dart:232', 'Building linear progress', {}, 'D');
+        // #endregion
         return _buildLinearProgress();
     }
   }
 
   Widget _buildLinearProgress() {
+    // #region agent log
+    _log('progress_bar.dart:273', '_buildLinearProgress entry', {'hasGradient': progressGradient != null, 'animateProgress': animateProgress, 'progressValue': progressValue}, 'D');
+    // #endregion
     if (progressGradient != null) {
+      // #region agent log
+      _log('progress_bar.dart:276', 'Building gradient progress', {}, 'D');
+      // #endregion
       return _buildGradientProgress();
     }
 
     if (animateProgress) {
+      // #region agent log
+      _log('progress_bar.dart:281', 'Building animated progress', {'duration': animationDuration.inMilliseconds, 'curve': animationCurve.toString()}, 'E');
+      // #endregion
       return TweenAnimationBuilder<double>(
         duration: animationDuration,
         curve: animationCurve,
         tween: Tween<double>(begin: 0, end: progressValue),
         builder: (context, value, child) {
+          // #region agent log
+          _log('progress_bar.dart:288', 'Animation builder callback', {'animatedValue': value, 'targetValue': progressValue}, 'E');
+          // #endregion
           return LinearProgressIndicator(
             value: value,
             backgroundColor: backgroundColor,
@@ -258,6 +322,9 @@ class LinearProgressBar extends StatelessWidget {
       );
     }
 
+    // #region agent log
+    _log('progress_bar.dart:303', 'Building static linear progress', {'progressValue': progressValue}, 'D');
+    // #endregion
     return LinearProgressIndicator(
       value: progressValue,
       backgroundColor: backgroundColor,

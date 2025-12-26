@@ -75,7 +75,6 @@ linter:
     one_member_abstracts: false
     only_throw_errors: true
     overridden_fields: true
-    package_api_docs: false
     package_prefixed_library_names: true
     parameter_assignments: true
     prefer_adjacent_string_concatenation: true

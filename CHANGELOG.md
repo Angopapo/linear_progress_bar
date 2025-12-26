@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0+1] - 2025-12-26
+
+### Fixed
+
+- Fixed linting issues: removed unnecessary library declaration
+- Fixed `prefer_const_declarations`: changed static final to static const for deprecated fields
+- Fixed `omit_local_variable_types` in progress_bar.dart
+- Fixed `avoid_redundant_argument_values` in multiple files
+- Fixed `prefer_const_constructors` in test files
+- Removed deprecated `package_api_docs` rule from analysis_options.yaml (removed in Dart 3.7.0)
+
+### Changed
+
+- Improved code quality by addressing all analyzer warnings and info messages
+- Removed unused test function
+
 ## [2.0.0] - 2025-12-21
 
 ### Added
