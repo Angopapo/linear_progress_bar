@@ -28,6 +28,18 @@ enum CircularStartAngle {
   left,
 }
 
+/// Position of the child widget in the circular percent indicator.
+enum CircularChildPosition {
+  /// Child in the center of the circle (overlay).
+  center,
+
+  /// Child at the top (above the circle).
+  top,
+
+  /// Child at the bottom (below the circle).
+  bottom,
+}
+
 /// A beautiful and customizable circular percent indicator widget.
 ///
 /// This widget displays progress in a circular format with extensive
@@ -43,6 +55,16 @@ enum CircularStartAngle {
 ///   backgroundColor: Colors.grey.shade300,
 ///   center: Text('75%'),
 ///   animation: true,
+/// )
+/// ```
+///
+/// With child positioning:
+/// ```dart
+/// CircularPercentIndicator(
+///   percent: 0.75,
+///   radius: 60,
+///   child: Icon(Icons.check),
+///   childPosition: CircularChildPosition.center,
 /// )
 /// ```
 class CircularPercentIndicator extends StatefulWidget {
@@ -123,6 +145,28 @@ class CircularPercentIndicator extends StatefulWidget {
   /// Whether to animate from last percent or from 0.
   final bool animateFromLastPercent;
 
+  /// Child widget with configurable position.
+  /// Use this instead of center/header/footer for more control.
+  final Widget? child;
+
+  /// Position of the child widget.
+  final CircularChildPosition childPosition;
+
+  /// Whether to show percentage text automatically.
+  final bool showPercentage;
+
+  /// Text style for percentage text.
+  final TextStyle? percentageTextStyle;
+
+  /// Number of decimal places for percentage display.
+  final int percentageDecimals;
+
+  /// Whether to add percent symbol.
+  final bool addPercentSign;
+
+  /// Spacing between circle and header/footer.
+  final double spacing;
+
   /// Creates a circular percent indicator widget.
   const CircularPercentIndicator({
     super.key,
@@ -151,6 +195,13 @@ class CircularPercentIndicator extends StatefulWidget {
     this.arcType,
     this.arcBackgroundColor,
     this.animateFromLastPercent = false,
+    this.child,
+    this.childPosition = CircularChildPosition.center,
+    this.showPercentage = false,
+    this.percentageTextStyle,
+    this.percentageDecimals = 0,
+    this.addPercentSign = true,
+    this.spacing = 8.0,
   }) : assert(percent >= 0.0 && percent <= 1.0, 'Percent must be between 0.0 and 1.0');
 
   @override
@@ -232,16 +283,75 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
     super.dispose();
   }
 
+  String _formatPercent(double value) {
+    final percentage = value * 100;
+    final formatted = percentage.toStringAsFixed(widget.percentageDecimals);
+    return widget.addPercentSign ? '$formatted%' : formatted;
+  }
+
+  Widget? _buildCenterContent() {
+    // Priority: center > child (when center position) > showPercentage
+    if (widget.center != null) {
+      return widget.center;
+    }
+    
+    if (widget.child != null && widget.childPosition == CircularChildPosition.center) {
+      return widget.child;
+    }
+    
+    if (widget.showPercentage) {
+      return AnimatedBuilder(
+        animation: _animation,
+        builder: (context, _) {
+          return Text(
+            _formatPercent(_animation.value),
+            style: widget.percentageTextStyle ??
+                TextStyle(
+                  fontSize: widget.radius * 0.3,
+                  fontWeight: FontWeight.bold,
+                  color: widget.progressColor,
+                ),
+          );
+        },
+      );
+    }
+    
+    return null;
+  }
+
+  Widget? _buildTopContent() {
+    if (widget.header != null) {
+      return widget.header;
+    }
+    if (widget.child != null && widget.childPosition == CircularChildPosition.top) {
+      return widget.child;
+    }
+    return null;
+  }
+
+  Widget? _buildBottomContent() {
+    if (widget.footer != null) {
+      return widget.footer;
+    }
+    if (widget.child != null && widget.childPosition == CircularChildPosition.bottom) {
+      return widget.child;
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = widget.radius * 2;
+    final topContent = _buildTopContent();
+    final bottomContent = _buildBottomContent();
+    final centerContent = _buildCenterContent();
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (widget.header != null) ...[
-          widget.header!,
-          const SizedBox(height: 8),
+        if (topContent != null) ...[
+          topContent,
+          SizedBox(height: widget.spacing),
         ],
         AnimatedBuilder(
           animation: _animation,
@@ -267,16 +377,16 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
                   arcType: widget.arcType,
                   arcBackgroundColor: widget.arcBackgroundColor,
                 ),
-                child: widget.center != null
-                    ? Center(child: widget.center)
+                child: centerContent != null
+                    ? Center(child: centerContent)
                     : null,
               ),
             );
           },
         ),
-        if (widget.footer != null) ...[
-          const SizedBox(height: 8),
-          widget.footer!,
+        if (bottomContent != null) ...[
+          SizedBox(height: widget.spacing),
+          bottomContent,
         ],
       ],
     );

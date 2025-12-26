@@ -13,16 +13,29 @@ A powerful and customizable progress indicator library for Flutter. Supports lin
 
 ## Features
 
+### Progress Bars
 - ✅ **Linear Progress Bar** - Traditional horizontal progress indicator
-- ✅ **Circular Percent Indicator** - Beautiful circular progress with percentage display
-- ✅ **Gauge Indicator** - Modern speedometer-style gauge with needle and ranges
-- ✅ **Dots Progress Indicator** - Step-based dots indicator
 - ✅ **Titled Progress Bar** - Progress bar with customizable labels
-- ✅ **Gradient Support** - Apply beautiful gradients to all progress indicators
+- ✅ **Dots Progress Indicator** - Step-based dots indicator
+
+### Percent Indicators
+- ✅ **Circular Percent Indicator** - Beautiful circular progress with percentage display
+- ✅ **Linear Percent Indicator** - Linear progress with leading/trailing/center widgets
+- ✅ **Multi-segment Linear Indicator** - Show multiple progress segments
+
+### Gauges
+- ✅ **Gauge Indicator** - Modern speedometer-style gauge with needle and ranges
+- ✅ **Linear Gauge** - Horizontal/vertical gauge with ruler, pointer, and ranges
+- ✅ **Radial Gauge** - Advanced circular gauge with needle and shape pointers
+
+### Common Features
+- ✅ **Gradient Support** - Apply beautiful gradients to all indicators
 - ✅ **Smooth Animations** - Animated progress transitions with customizable curves
+- ✅ **Toggle Animation** - Enable/disable animations on any indicator
+- ✅ **Custom Animation Duration** - Control animation timing
+- ✅ **Interactivity** - Drag/tap to change values on gauges
 - ✅ **Multiple Label Types** - Text, percentage, step count, or custom widgets
-- ✅ **Flexible Label Positioning** - Center, start, end, top, or bottom
-- ✅ **Interactive Components** - Tap handlers for dots indicator
+- ✅ **Flexible Child Positioning** - Left/right/center for linear, top/bottom/center for circular
 - ✅ **Customizable Appearance** - Colors, sizes, shapes, borders, and more
 - ✅ **Accessibility Support** - Semantic labels and values
 
@@ -416,6 +429,60 @@ LinearProgressBar(
 | `dotsSpacing` | `EdgeInsets` | `zero` | Spacing around dots |
 | `onDotTap` | `OnTap?` | `null` | Dot tap callback |
 
+### LinearGauge
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `value` | `double` | `0.0` | Current value (0.0 to 1.0) |
+| `orientation` | `LinearGaugeOrientation` | `horizontal` | Gauge orientation |
+| `thickness` | `double` | `20.0` | Track thickness |
+| `valueColor` | `Color` | `Colors.blue` | Value bar color |
+| `backgroundColor` | `Color` | `grey` | Background color |
+| `valueGradient` | `Gradient?` | `null` | Gradient for value bar |
+| `rulerStyle` | `RulerStyle` | `none` | Ruler/tick style |
+| `rulerPosition` | `RulerPosition` | `start` | Ruler position |
+| `pointer` | `PointerConfig?` | `null` | Pointer configuration |
+| `ranges` | `List<LinearGaugeRange>?` | `null` | Color ranges |
+| `animation` | `bool` | `false` | Enable animation |
+| `interactive` | `bool` | `false` | Enable drag interaction |
+| `onValueChanged` | `Function?` | `null` | Value change callback |
+
+### RadialGauge
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `value` | `double` | `0.0` | Current value (0.0 to 1.0) |
+| `size` | `double` | `200.0` | Gauge size |
+| `position` | `RadialGaugePosition` | `bottom` | Start position |
+| `sweepAngle` | `double` | `270.0` | Sweep angle in degrees |
+| `trackWidth` | `double` | `20.0` | Track width |
+| `valueColor` | `Color` | `Colors.blue` | Value bar color |
+| `needle` | `NeedleConfig?` | `null` | Needle configuration |
+| `shapePointer` | `ShapePointerConfig?` | `null` | Shape pointer config |
+| `ranges` | `List<RadialGaugeRange>?` | `null` | Color ranges |
+| `showTicks` | `bool` | `false` | Show tick marks |
+| `showTickLabels` | `bool` | `false` | Show tick labels |
+| `interactive` | `bool` | `false` | Enable drag interaction |
+
+### LinearPercentIndicator
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `percent` | `double` | `0.0` | Progress value (0.0 to 1.0) |
+| `width` | `double?` | `null` | Width (uses available space if null) |
+| `lineHeight` | `double` | `10.0` | Height of the progress bar |
+| `progressColor` | `Color` | `Colors.blue` | Progress color |
+| `linearGradient` | `Gradient?` | `null` | Gradient for progress |
+| `leading` | `Widget?` | `null` | Widget on the left |
+| `trailing` | `Widget?` | `null` | Widget on the right |
+| `center` | `Widget?` | `null` | Widget in the center |
+| `childPosition` | `LinearChildPosition` | `center` | Child positioning |
+| `animation` | `bool` | `false` | Enable animation |
+| `animationDuration` | `int` | `500` | Animation duration (ms) |
+| `showPercentage` | `bool` | `false` | Show percentage text |
+| `segments` | `List<LinearSegment>?` | `null` | Multi-segment config |
+| `isRTL` | `bool` | `false` | Right-to-left support |
+
 ### Enums
 
 #### GaugeStyle
@@ -443,6 +510,69 @@ LinearProgressBar(
 - `CircularStartAngle.right` - Start from right (3 o'clock)
 - `CircularStartAngle.bottom` - Start from bottom (6 o'clock)
 - `CircularStartAngle.left` - Start from left (9 o'clock)
+
+#### LinearGaugeOrientation
+
+- `LinearGaugeOrientation.horizontal` - Horizontal gauge
+- `LinearGaugeOrientation.vertical` - Vertical gauge
+
+#### RulerStyle
+
+- `RulerStyle.none` - No ruler marks
+- `RulerStyle.simple` - Simple tick marks
+- `RulerStyle.labeled` - Tick marks with labels
+- `RulerStyle.graduated` - Major and minor tick marks
+- `RulerStyle.bothSides` - Tick marks on both sides
+
+#### PointerStyle
+
+- `PointerStyle.none` - No pointer
+- `PointerStyle.triangle` - Triangle pointer
+- `PointerStyle.diamond` - Diamond pointer
+- `PointerStyle.arrow` - Arrow pointer
+- `PointerStyle.circle` - Circle pointer
+- `PointerStyle.rectangle` - Rectangle pointer
+- `PointerStyle.invertedTriangle` - Inverted triangle
+
+#### RadialGaugePosition
+
+- `RadialGaugePosition.top` - Start from top
+- `RadialGaugePosition.right` - Start from right
+- `RadialGaugePosition.bottom` - Start from bottom
+- `RadialGaugePosition.left` - Start from left
+- `RadialGaugePosition.custom` - Custom start angle
+
+#### NeedleStyle
+
+- `NeedleStyle.none` - No needle
+- `NeedleStyle.simple` - Simple line needle
+- `NeedleStyle.tapered` - Tapered needle
+- `NeedleStyle.triangle` - Triangle needle
+- `NeedleStyle.diamond` - Diamond needle
+- `NeedleStyle.flat` - Modern flat needle
+- `NeedleStyle.compass` - Compass-style needle
+
+#### ShapePointerStyle
+
+- `ShapePointerStyle.none` - No shape pointer
+- `ShapePointerStyle.circle` - Circle shape
+- `ShapePointerStyle.triangle` - Triangle shape
+- `ShapePointerStyle.diamond` - Diamond shape
+- `ShapePointerStyle.rectangle` - Rectangle shape
+- `ShapePointerStyle.invertedTriangle` - Inverted triangle
+- `ShapePointerStyle.arrow` - Arrow shape
+
+#### LinearChildPosition
+
+- `LinearChildPosition.left` - Child on left
+- `LinearChildPosition.right` - Child on right
+- `LinearChildPosition.center` - Child in center
+
+#### CircularChildPosition
+
+- `CircularChildPosition.center` - Child in center
+- `CircularChildPosition.top` - Child at top
+- `CircularChildPosition.bottom` - Child at bottom
 
 ### Helper Classes
 
@@ -506,18 +636,177 @@ final decorator = CircularDecorator.thick();
 final decorator = CircularDecorator.thin();
 ```
 
+### Linear Gauge
+
+A powerful linear gauge with orientation, ruler style, pointer, value bar, ranges, animation, and interactivity.
+
+```dart
+LinearGauge(
+  value: 0.65,
+  orientation: LinearGaugeOrientation.horizontal,
+  thickness: 20,
+  valueColor: Colors.blue,
+  backgroundColor: Colors.grey.shade300,
+  rulerStyle: RulerStyle.graduated,
+  pointer: PointerConfig(
+    style: PointerStyle.triangle,
+    color: Colors.red,
+    size: 20,
+  ),
+  ranges: [
+    LinearGaugeRange(start: 0.0, end: 0.3, color: Colors.green),
+    LinearGaugeRange(start: 0.3, end: 0.7, color: Colors.yellow),
+    LinearGaugeRange(start: 0.7, end: 1.0, color: Colors.red),
+  ],
+  animation: true,
+  interactive: true,
+  onValueChanged: (value) => print('Value: $value'),
+)
+```
+
+### Radial Gauge
+
+An advanced radial gauge with position, needle pointer, shape pointer, value bar, and interactivity.
+
+```dart
+RadialGauge(
+  value: 0.75,
+  size: 250,
+  position: RadialGaugePosition.bottom,
+  trackWidth: 20,
+  valueColor: Colors.blue,
+  needle: NeedleConfig(
+    style: NeedleStyle.tapered,
+    color: Colors.red,
+    lengthRatio: 0.75,
+    showKnob: true,
+  ),
+  shapePointer: ShapePointerConfig(
+    style: ShapePointerStyle.triangle,
+    color: Colors.orange,
+    position: ShapePointerPosition.outer,
+  ),
+  ranges: [
+    RadialGaugeRange(start: 0.0, end: 0.33, color: Colors.green),
+    RadialGaugeRange(start: 0.33, end: 0.66, color: Colors.orange),
+    RadialGaugeRange(start: 0.66, end: 1.0, color: Colors.red),
+  ],
+  showTicks: true,
+  showTickLabels: true,
+  interactive: true,
+  onValueChanged: (value) => print('Value: $value'),
+)
+```
+
+### Linear Percent Indicator
+
+A linear progress indicator with leading/trailing/center widgets, multi-segment support, and gradients.
+
+```dart
+LinearPercentIndicator(
+  percent: 0.75,
+  lineHeight: 25,
+  progressColor: Colors.blue,
+  backgroundColor: Colors.grey.shade300,
+  leading: Icon(Icons.download),
+  trailing: Text('75%'),
+  center: Text('Loading...'),
+  animation: true,
+  animationDuration: 1000,
+  linearGradient: LinearGradient(
+    colors: [Colors.blue, Colors.purple],
+  ),
+  borderRadius: BorderRadius.circular(12),
+)
+```
+
+#### Multi-Segment Linear Indicator
+
+```dart
+MultiSegmentLinearIndicator(
+  segments: [
+    LinearSegment(start: 0.0, end: 0.3, color: Colors.green, label: 'Done'),
+    LinearSegment(start: 0.3, end: 0.6, color: Colors.yellow, label: 'Progress'),
+    LinearSegment(start: 0.6, end: 0.9, color: Colors.orange, label: 'Pending'),
+  ],
+  lineHeight: 30,
+  animation: true,
+  showLabels: true,
+)
+```
+
+### Circular Percent Indicator with Child Positioning
+
+```dart
+// Center positioned child
+CircularPercentIndicator(
+  percent: 0.75,
+  radius: 60,
+  child: Icon(Icons.check),
+  childPosition: CircularChildPosition.center,
+)
+
+// Top positioned child
+CircularPercentIndicator(
+  percent: 0.75,
+  radius: 60,
+  child: Text('Title'),
+  childPosition: CircularChildPosition.top,
+)
+
+// With automatic percentage display
+CircularPercentIndicator(
+  percent: 0.75,
+  radius: 60,
+  showPercentage: true,
+  percentageDecimals: 1,
+)
+```
+
 ## Migration from v2.x
 
 If you're upgrading from version 2.x:
 
 ### New Features in v3.0
 
-- **CircularPercentIndicator** - Beautiful circular progress indicators
+- **LinearGauge** - Linear gauge with:
+  - Horizontal/vertical orientation
+  - Ruler styles (none, simple, labeled, graduated, bothSides)
+  - Pointer types (triangle, diamond, arrow, circle, rectangle)
+  - Value bar with gradient support
+  - Range coloring
+  - Animation and interactivity (drag to change value)
+  
+- **RadialGauge** - Radial gauge with:
+  - Customizable start position (top, right, bottom, left, custom angle)
+  - Needle pointer styles (simple, tapered, triangle, diamond, flat, compass)
+  - Shape pointer types (circle, triangle, diamond, rectangle, arrow)
+  - Value bar with gradient support
+  - Range coloring
+  - Tick marks with labels
+  - Animation and interactivity
+
+- **LinearPercentIndicator** - Linear percent indicator with:
+  - Leading/trailing/center widgets
+  - Child positioning (left, right, center)
+  - Multi-segment support
+  - Gradient progress
+  - RTL support
+  - Animation controls
+
+- **MultiSegmentLinearIndicator** - Display multiple segments in a single bar
+
+- **CircularPercentIndicator** enhancements:
+  - Child positioning (top, bottom, center)
+  - Automatic percentage display
+  - Custom decimal places
+
 - **GaugeIndicator** - Modern speedometer-style gauges with:
   - Multiple styles (simple, ticked, segmented, modern)
   - Needle pointer support
   - Range colors
   - Custom value formatting
+  
 - **GaugeDecorator** - Preset gauge configurations
 - **CircularDecorator** - Preset circular indicator configurations
 - Improved animations and customization options
