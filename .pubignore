@@ -6,6 +6,7 @@
 
 # IDE files
 .idea/
+.idea/**
 *.iml
 .vscode/
 *.code-workspace
@@ -13,6 +14,7 @@
 
 # Dart tool files (should not be published)
 .dart_tool/
+.dart_tool/**
 .packages
 .pub-cache/
 .pub/
@@ -34,5 +36,4 @@ local.properties
 
 # OS files
 Thumbs.db
-.DS_Store
 
