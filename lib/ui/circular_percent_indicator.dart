@@ -26,6 +26,40 @@ enum CircularStartAngle {
 
   /// Start from the left (9 o'clock position).
   left,
+
+  /// Custom angle (use customStartAngle parameter).
+  custom,
+}
+
+/// The position of the child widget relative to the circular indicator.
+enum CircularChildPosition {
+  /// Child widget at the top.
+  top,
+
+  /// Child widget at the bottom.
+  bottom,
+
+  /// Child widget in the center (default).
+  center,
+}
+
+/// Configuration for circular progress segments.
+class CircularSegment {
+  /// The percentage value of this segment (0.0 to 1.0).
+  final double value;
+
+  /// The color of this segment.
+  final Color color;
+
+  /// Optional gradient for this segment.
+  final Gradient? gradient;
+
+  /// Creates a circular segment.
+  const CircularSegment({
+    required this.value,
+    required this.color,
+    this.gradient,
+  });
 }
 
 /// A beautiful and customizable circular percent indicator widget.
@@ -84,6 +118,9 @@ class CircularPercentIndicator extends StatefulWidget {
   /// The starting angle for the progress.
   final CircularStartAngle startAngle;
 
+  /// Custom start angle in degrees (when startAngle is custom).
+  final double? customStartAngle;
+
   /// Whether to reverse the progress direction.
   final bool reverse;
 
@@ -123,6 +160,27 @@ class CircularPercentIndicator extends StatefulWidget {
   /// Whether to animate from last percent or from 0.
   final bool animateFromLastPercent;
 
+  /// Child widget position (top, bottom, or center).
+  final CircularChildPosition childPosition;
+
+  /// Custom child widget (alternative to center).
+  final Widget? child;
+
+  /// Spacing between child and the circular indicator.
+  final double childSpacing;
+
+  /// Segments for multi-segment circular indicator.
+  final List<CircularSegment>? segments;
+
+  /// Whether the indicator is interactive.
+  final bool interactive;
+
+  /// Callback when the value changes (through interaction).
+  final ValueChanged<double>? onValueChanged;
+
+  /// Whether to add automatic keep alive for animation state.
+  final bool addAutomaticKeepAlive;
+
   /// Creates a circular percent indicator widget.
   const CircularPercentIndicator({
     super.key,
@@ -138,6 +196,7 @@ class CircularPercentIndicator extends StatefulWidget {
     this.circleColor,
     this.circularStrokeCap = CircularStrokeCap.round,
     this.startAngle = CircularStartAngle.top,
+    this.customStartAngle,
     this.reverse = false,
     this.animation = false,
     this.animationDuration = const Duration(milliseconds: 500),
@@ -151,6 +210,13 @@ class CircularPercentIndicator extends StatefulWidget {
     this.arcType,
     this.arcBackgroundColor,
     this.animateFromLastPercent = false,
+    this.childPosition = CircularChildPosition.center,
+    this.child,
+    this.childSpacing = 8.0,
+    this.segments,
+    this.interactive = false,
+    this.onValueChanged,
+    this.addAutomaticKeepAlive = true,
   }) : assert(percent >= 0.0 && percent <= 1.0, 'Percent must be between 0.0 and 1.0');
 
   @override
@@ -158,10 +224,13 @@ class CircularPercentIndicator extends StatefulWidget {
 }
 
 class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
   double _previousPercent = 0.0;
+
+  @override
+  bool get wantKeepAlive => widget.addAutomaticKeepAlive;
 
   @override
   void initState() {
@@ -232,8 +301,54 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
     super.dispose();
   }
 
+  double _calculateValueFromPosition(Offset localPosition, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final dx = localPosition.dx - center.dx;
+    final dy = localPosition.dy - center.dy;
+    
+    // Calculate angle
+    var angle = math.atan2(dy, dx);
+    
+    // Adjust for start angle
+    double startAngleRad;
+    switch (widget.startAngle) {
+      case CircularStartAngle.top:
+        startAngleRad = -math.pi / 2;
+        break;
+      case CircularStartAngle.right:
+        startAngleRad = 0;
+        break;
+      case CircularStartAngle.bottom:
+        startAngleRad = math.pi / 2;
+        break;
+      case CircularStartAngle.left:
+        startAngleRad = math.pi;
+        break;
+      case CircularStartAngle.custom:
+        startAngleRad = (widget.customStartAngle ?? -90) * math.pi / 180;
+        break;
+    }
+    
+    // Normalize angle relative to start
+    angle = angle - startAngleRad;
+    if (angle < 0) angle += 2 * math.pi;
+    
+    // Convert to value
+    var value = angle / (2 * math.pi);
+    if (widget.reverse) value = 1.0 - value;
+    
+    return value.clamp(0.0, 1.0);
+  }
+
+  void _handleInteraction(Offset localPosition, Size size) {
+    if (!widget.interactive) return;
+    final value = _calculateValueFromPosition(localPosition, size);
+    widget.onValueChanged?.call(value);
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final size = widget.radius * 2;
 
     return Column(
@@ -243,10 +358,15 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
           widget.header!,
           const SizedBox(height: 8),
         ],
+        // Top child position
+        if ((widget.child != null && widget.childPosition == CircularChildPosition.top)) ...[
+          widget.child!,
+          SizedBox(height: widget.childSpacing),
+        ],
         AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
-            return SizedBox(
+            Widget indicator = SizedBox(
               width: size,
               height: size,
               child: CustomPaint(
@@ -260,26 +380,59 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
                   backgroundGradient: widget.backgroundGradient,
                   circularStrokeCap: widget.circularStrokeCap,
                   startAngle: widget.startAngle,
+                  customStartAngle: widget.customStartAngle,
                   reverse: widget.reverse,
                   fillColor: widget.fillColor,
                   circleColor: widget.circleColor,
                   rotateLinearGradient: widget.rotateLinearGradient,
                   arcType: widget.arcType,
                   arcBackgroundColor: widget.arcBackgroundColor,
+                  segments: widget.segments,
                 ),
-                child: widget.center != null
-                    ? Center(child: widget.center)
-                    : null,
+                child: _buildCenterChild(),
               ),
             );
+
+            if (widget.interactive) {
+              indicator = GestureDetector(
+                onTapDown: (details) => _handleInteraction(
+                  details.localPosition,
+                  Size(size, size),
+                ),
+                onPanUpdate: (details) => _handleInteraction(
+                  details.localPosition,
+                  Size(size, size),
+                ),
+                child: indicator,
+              );
+            }
+
+            return indicator;
           },
         ),
+        // Bottom child position
+        if ((widget.child != null && widget.childPosition == CircularChildPosition.bottom)) ...[
+          SizedBox(height: widget.childSpacing),
+          widget.child!,
+        ],
         if (widget.footer != null) ...[
           const SizedBox(height: 8),
           widget.footer!,
         ],
       ],
     );
+  }
+
+  Widget? _buildCenterChild() {
+    // Center takes priority
+    if (widget.center != null) {
+      return Center(child: widget.center);
+    }
+    // Then check for center positioned child
+    if (widget.child != null && widget.childPosition == CircularChildPosition.center) {
+      return Center(child: widget.child);
+    }
+    return null;
   }
 }
 
@@ -302,12 +455,14 @@ class _CircularProgressPainter extends CustomPainter {
   final Gradient? backgroundGradient;
   final CircularStrokeCap circularStrokeCap;
   final CircularStartAngle startAngle;
+  final double? customStartAngle;
   final bool reverse;
   final bool fillColor;
   final Color? circleColor;
   final bool rotateLinearGradient;
   final ArcType? arcType;
   final Color? arcBackgroundColor;
+  final List<CircularSegment>? segments;
 
   _CircularProgressPainter({
     required this.percent,
@@ -319,12 +474,14 @@ class _CircularProgressPainter extends CustomPainter {
     this.backgroundGradient,
     required this.circularStrokeCap,
     required this.startAngle,
+    this.customStartAngle,
     required this.reverse,
     required this.fillColor,
     this.circleColor,
     required this.rotateLinearGradient,
     this.arcType,
     this.arcBackgroundColor,
+    this.segments,
   });
 
   @override
@@ -346,6 +503,9 @@ class _CircularProgressPainter extends CustomPainter {
         break;
       case CircularStartAngle.left:
         startAngleRadians = math.pi;
+        break;
+      case CircularStartAngle.custom:
+        startAngleRadians = (customStartAngle ?? -90) * math.pi / 180;
         break;
     }
 
@@ -416,8 +576,12 @@ class _CircularProgressPainter extends CustomPainter {
       );
     }
 
+    // Draw segments if provided
+    if (segments != null && segments!.isNotEmpty) {
+      _drawSegments(canvas, center, radius, startAngleRadians, sweepAngle, strokeCap);
+    }
     // Draw progress arc
-    if (percent > 0) {
+    else if (percent > 0) {
       final progressPaint = Paint()
         ..color = progressColor
         ..style = PaintingStyle.stroke
@@ -427,10 +591,6 @@ class _CircularProgressPainter extends CustomPainter {
       if (linearGradient != null) {
         final rect = Rect.fromCircle(center: center, radius: radius);
         if (rotateLinearGradient) {
-          final transform = Matrix4.identity()
-            ..translate(center.dx, center.dy)
-            ..rotateZ(startAngleRadians + (percent * sweepAngle / 2))
-            ..translate(-center.dx, -center.dy);
           progressPaint.shader = linearGradient!.createShader(rect, textDirection: TextDirection.ltr);
         } else {
           progressPaint.shader = linearGradient!.createShader(rect);
@@ -449,6 +609,43 @@ class _CircularProgressPainter extends CustomPainter {
     }
   }
 
+  void _drawSegments(Canvas canvas, Offset center, double radius, 
+      double startAngleRadians, double sweepAngle, StrokeCap strokeCap) {
+    double currentAngle = startAngleRadians;
+    double remainingPercent = percent;
+
+    for (final segment in segments!) {
+      if (remainingPercent <= 0) break;
+
+      final segmentSweep = math.min(segment.value, remainingPercent) * sweepAngle;
+      
+      final paint = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = lineWidth
+        ..strokeCap = strokeCap;
+
+      if (segment.gradient != null) {
+        final rect = Rect.fromCircle(center: center, radius: radius);
+        paint.shader = segment.gradient!.createShader(rect);
+      } else {
+        paint.color = segment.color;
+      }
+
+      final actualSweep = segmentSweep * (reverse ? -1 : 1);
+
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        currentAngle,
+        actualSweep,
+        false,
+        paint,
+      );
+
+      currentAngle += segmentSweep * (reverse ? -1 : 1);
+      remainingPercent -= segment.value;
+    }
+  }
+
   @override
   bool shouldRepaint(_CircularProgressPainter oldDelegate) {
     return oldDelegate.percent != percent ||
@@ -459,6 +656,8 @@ class _CircularProgressPainter extends CustomPainter {
         oldDelegate.linearGradient != linearGradient ||
         oldDelegate.circularStrokeCap != circularStrokeCap ||
         oldDelegate.startAngle != startAngle ||
-        oldDelegate.reverse != reverse;
+        oldDelegate.customStartAngle != customStartAngle ||
+        oldDelegate.reverse != reverse ||
+        oldDelegate.segments != segments;
   }
 }
