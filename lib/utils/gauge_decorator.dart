@@ -48,6 +48,7 @@ class GaugeDecorator {
   final Color? needleColor;
 
   /// Creates a gauge decorator.
+  // ignore: sort_constructors_first
   const GaugeDecorator({
     this.valueColor,
     this.backgroundColor,
@@ -63,9 +64,10 @@ class GaugeDecorator {
   });
 
   /// Creates a speedometer-style gauge decorator.
+  // ignore: sort_constructors_first
   factory GaugeDecorator.speedometer({
-    double maxValue = 100,
-    String unit = '',
+    double maxValue = 100, // ignore: avoid_unused_constructor_parameters
+    String unit = '', // ignore: avoid_unused_constructor_parameters
     Color? lowColor,
     Color? mediumColor,
     Color? highColor,
@@ -101,6 +103,7 @@ class GaugeDecorator {
   }
 
   /// Creates a minimal flat gauge decorator.
+  // ignore: sort_constructors_first
   factory GaugeDecorator.minimal({
     Color? progressColor,
     Color? backgroundColor,
@@ -116,6 +119,7 @@ class GaugeDecorator {
   }
 
   /// Creates a gradient gauge decorator.
+  // ignore: sort_constructors_first
   factory GaugeDecorator.gradient({
     List<Color>? colors,
     double startAngle = 135,
@@ -129,12 +133,14 @@ class GaugeDecorator {
       gradient: SweepGradient(
         startAngle: startAngle * 3.14159 / 180,
         endAngle: (startAngle + sweepAngle) * 3.14159 / 180,
-        colors: colors ?? [Colors.green, Colors.yellow, Colors.orange, Colors.red],
+        colors:
+            colors ?? [Colors.green, Colors.yellow, Colors.orange, Colors.red],
       ),
     );
   }
 
   /// Creates a health/fitness style gauge decorator.
+  // ignore: sort_constructors_first
   factory GaugeDecorator.health({
     Color? goodColor,
     Color? warningColor,
@@ -170,19 +176,27 @@ class GaugeDecorator {
   }
 
   /// Creates a temperature gauge decorator.
+  // ignore: sort_constructors_first
   factory GaugeDecorator.temperature({
-    double minTemp = 0,
-    double maxTemp = 100,
+    double minTemp = 0, // ignore: avoid_unused_constructor_parameters
+    double maxTemp = 100, // ignore: avoid_unused_constructor_parameters
   }) {
-    return GaugeDecorator(
+    return const GaugeDecorator(
       startAngle: 180,
       sweepAngle: 180,
       gaugeStyle: GaugeStyle.ticked,
       showNeedle: true,
       needleColor: Colors.black87,
       tickCount: 10,
-      gradient: const LinearGradient(
-        colors: [Colors.blue, Colors.cyan, Colors.green, Colors.yellow, Colors.orange, Colors.red],
+      gradient: LinearGradient(
+        colors: [
+          Colors.blue,
+          Colors.cyan,
+          Colors.green,
+          Colors.yellow,
+          Colors.orange,
+          Colors.red
+        ],
       ),
     );
   }
@@ -240,6 +254,7 @@ class CircularDecorator {
   final Duration? animationDuration;
 
   /// Creates a circular decorator.
+  // ignore: sort_constructors_first
   const CircularDecorator({
     this.progressColor,
     this.backgroundColor,
@@ -250,6 +265,7 @@ class CircularDecorator {
   });
 
   /// Creates a modern gradient circular decorator.
+  // ignore: sort_constructors_first
   factory CircularDecorator.gradient({
     List<Color>? colors,
     double lineWidth = 10,
@@ -264,6 +280,7 @@ class CircularDecorator {
   }
 
   /// Creates a minimal flat circular decorator.
+  // ignore: sort_constructors_first
   factory CircularDecorator.minimal({
     Color progressColor = Colors.blue,
     Color backgroundColor = const Color(0xFFE0E0E0),
@@ -278,6 +295,7 @@ class CircularDecorator {
   }
 
   /// Creates a thick circular decorator.
+  // ignore: sort_constructors_first
   factory CircularDecorator.thick({
     Color? progressColor,
     Color? backgroundColor,
@@ -291,6 +309,7 @@ class CircularDecorator {
   }
 
   /// Creates a thin circular decorator.
+  // ignore: sort_constructors_first
   factory CircularDecorator.thin({
     Color? progressColor,
     Color? backgroundColor,

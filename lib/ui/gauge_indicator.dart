@@ -40,6 +40,7 @@ class GaugeSegment {
   final Color color;
 
   /// Creates a gauge segment.
+  // ignore: sort_constructors_first
   const GaugeSegment({
     required this.start,
     required this.end,
@@ -62,6 +63,7 @@ class GaugeRange {
   final String? label;
 
   /// Creates a gauge range.
+  // ignore: sort_constructors_first
   const GaugeRange({
     required this.start,
     required this.end,
@@ -187,6 +189,7 @@ class GaugeIndicator extends StatefulWidget {
   final VoidCallback? onAnimationEnd;
 
   /// Creates a gauge indicator widget.
+  // ignore: sort_constructors_first
   const GaugeIndicator({
     super.key,
     this.value = 0.0,
@@ -222,7 +225,8 @@ class GaugeIndicator extends StatefulWidget {
     this.subtitle,
     this.strokeCap = StrokeCap.round,
     this.onAnimationEnd,
-  }) : assert(value >= 0.0 && value <= 1.0, 'Value must be between 0.0 and 1.0');
+  }) : assert(
+            value >= 0.0 && value <= 1.0, 'Value must be between 0.0 and 1.0');
 
   @override
   State<GaugeIndicator> createState() => _GaugeIndicatorState();
@@ -249,6 +253,7 @@ class _GaugeIndicatorState extends State<GaugeIndicator>
         parent: _animationController,
         curve: widget.animationCurve,
       ));
+      // ignore: discarded_futures
       _animationController.forward();
       _animationController.addStatusListener(_onAnimationStatus);
     } else {
@@ -274,9 +279,10 @@ class _GaugeIndicatorState extends State<GaugeIndicator>
           parent: _animationController,
           curve: widget.animationCurve,
         ));
-        _animationController
-          ..reset()
-          ..forward();
+        // ignore: discarded_futures
+        _animationController.reset();
+        // ignore: discarded_futures
+        _animationController.forward();
       } else {
         _animation = AlwaysStoppedAnimation(widget.value);
       }
@@ -339,7 +345,8 @@ class _GaugeIndicatorState extends State<GaugeIndicator>
                   ),
                   if (widget.center != null)
                     widget.center!
-                  else if (widget.showValue && widget.labelPosition == GaugeLabelPosition.center)
+                  else if (widget.showValue &&
+                      widget.labelPosition == GaugeLabelPosition.center)
                     Text(
                       _formatValue(_animation.value),
                       style: widget.valueTextStyle ??
@@ -355,7 +362,8 @@ class _GaugeIndicatorState extends State<GaugeIndicator>
                       left: 0,
                       right: 0,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: widget.strokeWidth),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: widget.strokeWidth),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -384,7 +392,8 @@ class _GaugeIndicatorState extends State<GaugeIndicator>
             );
           },
         ),
-        if (widget.showValue && widget.labelPosition == GaugeLabelPosition.bottom) ...[
+        if (widget.showValue &&
+            widget.labelPosition == GaugeLabelPosition.bottom) ...[
           const SizedBox(height: 8),
           AnimatedBuilder(
             animation: _animation,
@@ -427,6 +436,7 @@ class _GaugePainter extends CustomPainter {
   final double needleLength;
   final StrokeCap strokeCap;
 
+  // ignore: sort_constructors_first
   _GaugePainter({
     required this.value,
     required this.strokeWidth,
@@ -526,7 +536,7 @@ class _GaugePainter extends CustomPainter {
         valuePaint.shader = gradient!.createShader(rect);
       } else if (ranges != null) {
         // Find the appropriate color based on value
-        Color currentColor = valueColor;
+        var currentColor = valueColor;
         for (final range in ranges!) {
           if (value >= range.start && value <= range.end) {
             currentColor = range.color;
@@ -558,15 +568,16 @@ class _GaugePainter extends CustomPainter {
     }
   }
 
-  void _drawTicks(Canvas canvas, Offset center, double radius, double startRad, double sweepRad) {
+  void _drawTicks(Canvas canvas, Offset center, double radius, double startRad,
+      double sweepRad) {
     final tickPaint = Paint()
       ..color = tickColor ?? Colors.grey.shade600
       ..strokeWidth = 2
       ..strokeCap = StrokeCap.round;
 
-    for (int i = 0; i <= tickCount; i++) {
+    for (var i = 0; i <= tickCount; i++) {
       final angle = startRad + (sweepRad * i / tickCount);
-      final isMainTick = i % 2 == 0;
+      final isMainTick = i.isEven;
       final length = isMainTick ? tickLength : tickLength * 0.6;
 
       final outerPoint = Offset(
@@ -582,7 +593,8 @@ class _GaugePainter extends CustomPainter {
     }
   }
 
-  void _drawNeedle(Canvas canvas, Offset center, double radius, double startRad, double sweepRad) {
+  void _drawNeedle(Canvas canvas, Offset center, double radius, double startRad,
+      double sweepRad) {
     final needleAngle = startRad + sweepRad * value;
     final needleRadius = radius * needleLength;
 

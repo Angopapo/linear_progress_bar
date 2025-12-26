@@ -507,7 +507,6 @@ void main() {
             home: Scaffold(
               body: CircularPercentIndicator(
                 percent: 0.5,
-                radius: 50,
               ),
             ),
           ),
@@ -617,7 +616,6 @@ void main() {
             home: Scaffold(
               body: GaugeIndicator(
                 value: 0.5,
-                size: 200,
               ),
             ),
           ),
@@ -633,8 +631,6 @@ void main() {
             home: Scaffold(
               body: GaugeIndicator(
                 value: 0.5,
-                showValue: true,
-                labelPosition: GaugeLabelPosition.center,
               ),
             ),
           ),
@@ -649,7 +645,6 @@ void main() {
             home: Scaffold(
               body: GaugeIndicator(
                 value: 0.75,
-                showValue: true,
                 valueFormatter: (v) => '${(v * 100).toInt()}°C',
               ),
             ),
@@ -871,7 +866,6 @@ void main() {
           orientation: LinearGaugeOrientation.vertical,
           thickness: 30,
           rulerStyle: RulerStyle.graduated,
-          showValueBar: true,
           animation: true,
           interactive: true,
         );
@@ -906,10 +900,7 @@ void main() {
             home: Scaffold(
               body: LinearGauge(
                 value: 0.5,
-                pointer: PointerConfig(
-                  style: PointerStyle.triangle,
-                  color: Colors.red,
-                ),
+                pointer: PointerConfig(),
               ),
             ),
           ),
@@ -941,8 +932,10 @@ void main() {
 
   group('LinearGaugeOrientation enum', () {
     test('should have all orientation values', () {
-      expect(LinearGaugeOrientation.values, contains(LinearGaugeOrientation.horizontal));
-      expect(LinearGaugeOrientation.values, contains(LinearGaugeOrientation.vertical));
+      expect(LinearGaugeOrientation.values,
+          contains(LinearGaugeOrientation.horizontal));
+      expect(LinearGaugeOrientation.values,
+          contains(LinearGaugeOrientation.vertical));
       expect(LinearGaugeOrientation.values.length, 2);
     });
   });
@@ -1031,7 +1024,6 @@ void main() {
           size: 250,
           trackWidth: 25,
           position: RadialGaugePosition.top,
-          showValueBar: true,
           animation: true,
           interactive: true,
         );
@@ -1051,7 +1043,6 @@ void main() {
             home: Scaffold(
               body: RadialGauge(
                 value: 0.5,
-                size: 200,
               ),
             ),
           ),
@@ -1067,10 +1058,7 @@ void main() {
             home: Scaffold(
               body: RadialGauge(
                 value: 0.5,
-                needle: NeedleConfig(
-                  style: NeedleStyle.tapered,
-                  color: Colors.red,
-                ),
+                needle: NeedleConfig(),
               ),
             ),
           ),
@@ -1085,10 +1073,7 @@ void main() {
             home: Scaffold(
               body: RadialGauge(
                 value: 0.5,
-                shapePointer: ShapePointerConfig(
-                  style: ShapePointerStyle.triangle,
-                  color: Colors.blue,
-                ),
+                shapePointer: ShapePointerConfig(),
               ),
             ),
           ),
@@ -1145,7 +1130,8 @@ void main() {
       expect(ShapePointerStyle.values, contains(ShapePointerStyle.triangle));
       expect(ShapePointerStyle.values, contains(ShapePointerStyle.diamond));
       expect(ShapePointerStyle.values, contains(ShapePointerStyle.rectangle));
-      expect(ShapePointerStyle.values, contains(ShapePointerStyle.invertedTriangle));
+      expect(ShapePointerStyle.values,
+          contains(ShapePointerStyle.invertedTriangle));
       expect(ShapePointerStyle.values, contains(ShapePointerStyle.arrow));
       expect(ShapePointerStyle.values.length, 7);
     });
@@ -1368,9 +1354,21 @@ void main() {
             home: Scaffold(
               body: MultiSegmentLinearIndicator(
                 segments: [
-                  LinearSegment(start: 0.0, end: 0.3, color: Colors.green, label: 'Complete'),
-                  LinearSegment(start: 0.3, end: 0.6, color: Colors.yellow, label: 'In Progress'),
-                  LinearSegment(start: 0.6, end: 1.0, color: Colors.red, label: 'Pending'),
+                  LinearSegment(
+                      start: 0.0,
+                      end: 0.3,
+                      color: Colors.green,
+                      label: 'Complete'),
+                  LinearSegment(
+                      start: 0.3,
+                      end: 0.6,
+                      color: Colors.yellow,
+                      label: 'In Progress'),
+                  LinearSegment(
+                      start: 0.6,
+                      end: 1.0,
+                      color: Colors.red,
+                      label: 'Pending'),
                 ],
                 width: 300,
               ),
@@ -1385,9 +1383,11 @@ void main() {
 
   group('CircularChildPosition enum', () {
     test('should have all position values', () {
-      expect(CircularChildPosition.values, contains(CircularChildPosition.center));
+      expect(
+          CircularChildPosition.values, contains(CircularChildPosition.center));
       expect(CircularChildPosition.values, contains(CircularChildPosition.top));
-      expect(CircularChildPosition.values, contains(CircularChildPosition.bottom));
+      expect(
+          CircularChildPosition.values, contains(CircularChildPosition.bottom));
       expect(CircularChildPosition.values.length, 3);
     });
   });
@@ -1400,7 +1400,6 @@ void main() {
             body: CircularPercentIndicator(
               percent: 0.5,
               child: Icon(Icons.check),
-              childPosition: CircularChildPosition.center,
             ),
           ),
         ),
@@ -1415,8 +1414,8 @@ void main() {
           home: Scaffold(
             body: CircularPercentIndicator(
               percent: 0.5,
-              child: Text('Top'),
               childPosition: CircularChildPosition.top,
+              child: Text('Top'),
             ),
           ),
         ),
@@ -1431,8 +1430,8 @@ void main() {
           home: Scaffold(
             body: CircularPercentIndicator(
               percent: 0.5,
-              child: Text('Bottom'),
               childPosition: CircularChildPosition.bottom,
+              child: Text('Bottom'),
             ),
           ),
         ),

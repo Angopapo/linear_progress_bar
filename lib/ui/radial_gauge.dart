@@ -112,6 +112,7 @@ class NeedleConfig {
   final bool hasShadow;
 
   /// Creates a needle configuration.
+  // ignore: sort_constructors_first
   const NeedleConfig({
     this.style = NeedleStyle.tapered,
     this.color = Colors.red,
@@ -153,6 +154,7 @@ class ShapePointerConfig {
   final bool hasShadow;
 
   /// Creates a shape pointer configuration.
+  // ignore: sort_constructors_first
   const ShapePointerConfig({
     this.style = ShapePointerStyle.triangle,
     this.color = Colors.blue,
@@ -186,6 +188,7 @@ class RadialGaugeRange {
   final double offsetRatio;
 
   /// Creates a radial gauge range.
+  // ignore: sort_constructors_first
   const RadialGaugeRange({
     required this.start,
     required this.end,
@@ -343,6 +346,7 @@ class RadialGauge extends StatefulWidget {
   final String Function(double value)? tickLabelFormatter;
 
   /// Creates a radial gauge widget.
+  // ignore: sort_constructors_first
   const RadialGauge({
     super.key,
     this.value = 0.0,
@@ -382,7 +386,8 @@ class RadialGauge extends StatefulWidget {
     this.showTickLabels = false,
     this.tickLabelStyle,
     this.tickLabelFormatter,
-  }) : assert(value >= 0.0 && value <= 1.0, 'Value must be between 0.0 and 1.0');
+  }) : assert(
+            value >= 0.0 && value <= 1.0, 'Value must be between 0.0 and 1.0');
 
   @override
   State<RadialGauge> createState() => _RadialGaugeState();
@@ -426,6 +431,7 @@ class _RadialGaugeState extends State<RadialGauge>
         parent: _animationController,
         curve: widget.animationCurve,
       ));
+      // ignore: discarded_futures
       _animationController.forward();
     } else {
       _animation = AlwaysStoppedAnimation(widget.value);
@@ -445,9 +451,10 @@ class _RadialGaugeState extends State<RadialGauge>
           parent: _animationController,
           curve: widget.animationCurve,
         ));
-        _animationController
-          ..reset()
-          ..forward();
+        // ignore: discarded_futures
+        _animationController.reset();
+        // ignore: discarded_futures
+        _animationController.forward();
       } else {
         _animation = AlwaysStoppedAnimation(widget.value);
       }
@@ -467,15 +474,14 @@ class _RadialGaugeState extends State<RadialGauge>
     final center = Offset(widget.size / 2, widget.size / 2);
     final touchVector = localPosition - center;
     var angle = math.atan2(touchVector.dy, touchVector.dx) * 180 / math.pi;
-    
+
     // Normalize angle to start from startAngle
     angle = angle - _startAngle;
     if (angle < 0) angle += 360;
     if (angle > 360) angle -= 360;
 
     // Calculate value from angle
-    double newValue = angle / widget.sweepAngle;
-    newValue = newValue.clamp(0.0, 1.0);
+    final newValue = (angle / widget.sweepAngle).clamp(0.0, 1.0);
 
     setState(() {
       _currentValue = newValue;
@@ -489,8 +495,9 @@ class _RadialGaugeState extends State<RadialGauge>
     if (widget.valueFormatter != null) {
       return widget.valueFormatter!(normalizedValue);
     }
-    final actualValue = widget.minValue + (widget.maxValue - widget.minValue) * normalizedValue;
-    return '${actualValue.toStringAsFixed(0)}';
+    final actualValue =
+        widget.minValue + (widget.maxValue - widget.minValue) * normalizedValue;
+    return actualValue.toStringAsFixed(0);
   }
 
   @override
@@ -529,7 +536,7 @@ class _RadialGaugeState extends State<RadialGauge>
         animation: _animation,
         builder: (context, child) {
           final displayValue = _isDragging ? _currentValue : _animation.value;
-          
+
           return SizedBox(
             width: widget.size,
             height: widget.size,
@@ -560,8 +567,9 @@ class _RadialGaugeState extends State<RadialGauge>
                     tickColor: widget.tickColor,
                     showTickLabels: widget.showTickLabels,
                     tickLabelStyle: widget.tickLabelStyle,
-                    tickLabelFormatter: widget.tickLabelFormatter ?? 
-                        (v) => '${(widget.minValue + (widget.maxValue - widget.minValue) * v).toInt()}',
+                    tickLabelFormatter: widget.tickLabelFormatter ??
+                        (v) =>
+                            '${(widget.minValue + (widget.maxValue - widget.minValue) * v).toInt()}',
                   ),
                 ),
                 if (widget.center != null)
@@ -609,6 +617,7 @@ class _RadialGaugePainter extends CustomPainter {
   final TextStyle? tickLabelStyle;
   final String Function(double)? tickLabelFormatter;
 
+  // ignore: sort_constructors_first
   _RadialGaugePainter({
     required this.value,
     required this.startAngle,
@@ -661,7 +670,7 @@ class _RadialGaugePainter extends CustomPainter {
       for (final range in ranges!) {
         final rangeWidth = range.width ?? trackWidth;
         final rangeRadius = radius + (range.offsetRatio * trackWidth);
-        
+
         final rangePaint = Paint()
           ..color = range.color
           ..style = PaintingStyle.stroke
@@ -720,15 +729,16 @@ class _RadialGaugePainter extends CustomPainter {
     }
   }
 
-  void _drawTicks(Canvas canvas, Offset center, double radius, double startRad, double sweepRad) {
+  void _drawTicks(Canvas canvas, Offset center, double radius, double startRad,
+      double sweepRad) {
     final tickPaint = Paint()
       ..color = tickColor
       ..strokeWidth = 1.5
       ..strokeCap = StrokeCap.round;
 
     final totalTicks = (majorTickCount - 1) * (minorTicksPerMajor + 1) + 1;
-    
-    for (int i = 0; i < totalTicks; i++) {
+
+    for (var i = 0; i < totalTicks; i++) {
       final isMajor = i % (minorTicksPerMajor + 1) == 0;
       final tickLength = isMajor ? majorTickLength : minorTickLength;
       final angle = startRad + (sweepRad * i / (totalTicks - 1));
@@ -770,19 +780,24 @@ class _RadialGaugePainter extends CustomPainter {
     }
   }
 
-  void _drawShapePointer(Canvas canvas, Offset center, double radius, double startRad, double sweepRad) {
+  void _drawShapePointer(Canvas canvas, Offset center, double radius,
+      double startRad, double sweepRad) {
     if (shapePointer == null) return;
 
     final angle = startRad + sweepRad * value;
-    
+
     double pointerRadius;
     switch (shapePointer!.position) {
       case ShapePointerPosition.outer:
-        pointerRadius = radius + trackWidth / 2 + shapePointer!.size / 2 + 
+        pointerRadius = radius +
+            trackWidth / 2 +
+            shapePointer!.size / 2 +
             (shapePointer!.offsetRatio * trackWidth);
         break;
       case ShapePointerPosition.inner:
-        pointerRadius = radius - trackWidth / 2 - shapePointer!.size / 2 + 
+        pointerRadius = radius -
+            trackWidth / 2 -
+            shapePointer!.size / 2 +
             (shapePointer!.offsetRatio * trackWidth);
         break;
       case ShapePointerPosition.onTrack:
@@ -825,7 +840,7 @@ class _RadialGaugePainter extends CustomPainter {
 
   void _drawShape(Canvas canvas, Offset center, double angle, Paint paint) {
     if (shapePointer == null) return;
-    
+
     final size = shapePointer!.size;
 
     canvas.save();
@@ -898,7 +913,8 @@ class _RadialGaugePainter extends CustomPainter {
     canvas.restore();
   }
 
-  void _drawNeedle(Canvas canvas, Offset center, double radius, double startRad, double sweepRad) {
+  void _drawNeedle(Canvas canvas, Offset center, double radius, double startRad,
+      double sweepRad) {
     if (needle == null) return;
 
     final angle = startRad + sweepRad * value;
@@ -943,14 +959,16 @@ class _RadialGaugePainter extends CustomPainter {
         ..color = Colors.white.withValues(alpha: 0.4)
         ..style = PaintingStyle.fill;
       canvas.drawCircle(
-        Offset(center.dx - needle!.knobRadius * 0.2, center.dy - needle!.knobRadius * 0.2),
+        Offset(center.dx - needle!.knobRadius * 0.2,
+            center.dy - needle!.knobRadius * 0.2),
         needle!.knobRadius * 0.4,
         innerKnobPaint,
       );
     }
   }
 
-  void _drawNeedleShape(Canvas canvas, Offset center, double angle, double length, Paint paint) {
+  void _drawNeedleShape(
+      Canvas canvas, Offset center, double angle, double length, Paint paint) {
     if (needle == null) return;
 
     final endPoint = Offset(
@@ -961,7 +979,7 @@ class _RadialGaugePainter extends CustomPainter {
     switch (needle!.style) {
       case NeedleStyle.simple:
         final linePaint = Paint()
-          ..color = paint.color ?? needle!.color
+          ..color = paint.color
           ..strokeWidth = needle!.width / 2
           ..strokeCap = StrokeCap.round;
         if (paint.shader != null) linePaint.shader = paint.shader;
@@ -972,7 +990,7 @@ class _RadialGaugePainter extends CustomPainter {
         final path = Path();
         final perpAngle = angle + math.pi / 2;
         final baseWidth = needle!.width / 2;
-        
+
         path.moveTo(
           center.dx + baseWidth * math.cos(perpAngle),
           center.dy + baseWidth * math.sin(perpAngle),
@@ -990,7 +1008,7 @@ class _RadialGaugePainter extends CustomPainter {
         final path = Path();
         final baseWidth = needle!.width;
         final perpAngle = angle + math.pi / 2;
-        
+
         path.moveTo(
           center.dx + baseWidth * math.cos(perpAngle),
           center.dy + baseWidth * math.sin(perpAngle),
@@ -1012,7 +1030,7 @@ class _RadialGaugePainter extends CustomPainter {
           center.dy + (length * 0.3) * math.sin(angle),
         );
         final perpAngle = angle + math.pi / 2;
-        
+
         path.moveTo(center.dx, center.dy);
         path.lineTo(
           midPoint.dx + baseWidth * math.cos(perpAngle),
@@ -1031,7 +1049,7 @@ class _RadialGaugePainter extends CustomPainter {
         final path = Path();
         final baseWidth = needle!.width;
         final perpAngle = angle + math.pi / 2;
-        
+
         path.moveTo(
           center.dx + baseWidth * 0.3 * math.cos(perpAngle),
           center.dy + baseWidth * 0.3 * math.sin(perpAngle),
@@ -1057,12 +1075,12 @@ class _RadialGaugePainter extends CustomPainter {
         final baseWidth = needle!.width;
         final perpAngle = angle + math.pi / 2;
         final tailLength = length * needle!.tailLengthRatio;
-        
+
         final tailPoint = Offset(
           center.dx - tailLength * math.cos(angle),
           center.dy - tailLength * math.sin(angle),
         );
-        
+
         // Front half (colored)
         path.moveTo(
           center.dx + baseWidth * 0.5 * math.cos(perpAngle),
@@ -1075,13 +1093,13 @@ class _RadialGaugePainter extends CustomPainter {
         );
         path.close();
         canvas.drawPath(path, paint);
-        
+
         // Back half (lighter)
         final tailPath = Path();
         final tailPaint = Paint()
-          ..color = (paint.color ?? needle!.color).withValues(alpha: 0.5)
+          ..color = paint.color.withValues(alpha: 0.5)
           ..style = PaintingStyle.fill;
-        
+
         tailPath.moveTo(
           center.dx + baseWidth * 0.5 * math.cos(perpAngle),
           center.dy + baseWidth * 0.5 * math.sin(perpAngle),

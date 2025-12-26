@@ -168,6 +168,7 @@ class CircularPercentIndicator extends StatefulWidget {
   final double spacing;
 
   /// Creates a circular percent indicator widget.
+  // ignore: sort_constructors_first
   const CircularPercentIndicator({
     super.key,
     this.percent = 0.0,
@@ -202,10 +203,12 @@ class CircularPercentIndicator extends StatefulWidget {
     this.percentageDecimals = 0,
     this.addPercentSign = true,
     this.spacing = 8.0,
-  }) : assert(percent >= 0.0 && percent <= 1.0, 'Percent must be between 0.0 and 1.0');
+  }) : assert(percent >= 0.0 && percent <= 1.0,
+            'Percent must be between 0.0 and 1.0');
 
   @override
-  State<CircularPercentIndicator> createState() => _CircularPercentIndicatorState();
+  State<CircularPercentIndicator> createState() =>
+      _CircularPercentIndicatorState();
 }
 
 class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
@@ -230,6 +233,7 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
         parent: _animationController,
         curve: widget.animationCurve,
       ));
+      // ignore: discarded_futures
       _animationController.forward();
       _animationController.addStatusListener(_onAnimationStatus);
     } else {
@@ -260,14 +264,18 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
           ));
         } else {
           _animation = Tween<double>(
-            begin: widget.animateFromLastPercent ? _previousPercent : oldWidget.percent,
+            begin: widget.animateFromLastPercent
+                ? _previousPercent
+                : oldWidget.percent,
             end: widget.percent,
           ).animate(CurvedAnimation(
             parent: _animationController,
             curve: widget.animationCurve,
           ));
+          // ignore: discarded_futures
           _animationController.reset();
         }
+        // ignore: discarded_futures
         _animationController.forward();
       } else {
         _animation = AlwaysStoppedAnimation(widget.percent);
@@ -294,11 +302,12 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
     if (widget.center != null) {
       return widget.center;
     }
-    
-    if (widget.child != null && widget.childPosition == CircularChildPosition.center) {
+
+    if (widget.child != null &&
+        widget.childPosition == CircularChildPosition.center) {
       return widget.child;
     }
-    
+
     if (widget.showPercentage) {
       return AnimatedBuilder(
         animation: _animation,
@@ -315,7 +324,7 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
         },
       );
     }
-    
+
     return null;
   }
 
@@ -323,7 +332,8 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
     if (widget.header != null) {
       return widget.header;
     }
-    if (widget.child != null && widget.childPosition == CircularChildPosition.top) {
+    if (widget.child != null &&
+        widget.childPosition == CircularChildPosition.top) {
       return widget.child;
     }
     return null;
@@ -333,7 +343,8 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
     if (widget.footer != null) {
       return widget.footer;
     }
-    if (widget.child != null && widget.childPosition == CircularChildPosition.bottom) {
+    if (widget.child != null &&
+        widget.childPosition == CircularChildPosition.bottom) {
       return widget.child;
     }
     return null;
@@ -377,9 +388,8 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
                   arcType: widget.arcType,
                   arcBackgroundColor: widget.arcBackgroundColor,
                 ),
-                child: centerContent != null
-                    ? Center(child: centerContent)
-                    : null,
+                child:
+                    centerContent != null ? Center(child: centerContent) : null,
               ),
             );
           },
@@ -419,6 +429,7 @@ class _CircularProgressPainter extends CustomPainter {
   final ArcType? arcType;
   final Color? arcBackgroundColor;
 
+  // ignore: sort_constructors_first
   _CircularProgressPainter({
     required this.percent,
     required this.lineWidth,
@@ -537,11 +548,8 @@ class _CircularProgressPainter extends CustomPainter {
       if (linearGradient != null) {
         final rect = Rect.fromCircle(center: center, radius: radius);
         if (rotateLinearGradient) {
-          final transform = Matrix4.identity()
-            ..translate(center.dx, center.dy)
-            ..rotateZ(startAngleRadians + (percent * sweepAngle / 2))
-            ..translate(-center.dx, -center.dy);
-          progressPaint.shader = linearGradient!.createShader(rect, textDirection: TextDirection.ltr);
+          progressPaint.shader = linearGradient!
+              .createShader(rect, textDirection: TextDirection.ltr);
         } else {
           progressPaint.shader = linearGradient!.createShader(rect);
         }

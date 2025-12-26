@@ -30,15 +30,17 @@ class LinearSegment {
   final String? label;
 
   /// Creates a linear segment.
+  // ignore: sort_constructors_first
   const LinearSegment({
     required this.start,
     required this.end,
     required this.color,
     this.gradient,
     this.label,
-  }) : assert(start >= 0.0 && start <= 1.0, 'start must be between 0.0 and 1.0'),
-       assert(end >= 0.0 && end <= 1.0, 'end must be between 0.0 and 1.0'),
-       assert(start <= end, 'start must be <= end');
+  })  : assert(
+            start >= 0.0 && start <= 1.0, 'start must be between 0.0 and 1.0'),
+        assert(end >= 0.0 && end <= 1.0, 'end must be between 0.0 and 1.0'),
+        assert(start <= end, 'start must be <= end');
 }
 
 /// A powerful and customizable linear percent indicator widget.
@@ -161,6 +163,7 @@ class LinearPercentIndicator extends StatefulWidget {
   final Radius? barRadius;
 
   /// Creates a linear percent indicator widget.
+  // ignore: sort_constructors_first
   const LinearPercentIndicator({
     super.key,
     this.percent = 0.0,
@@ -195,7 +198,8 @@ class LinearPercentIndicator extends StatefulWidget {
     this.maskFilter,
     this.isRTL = false,
     this.barRadius,
-  }) : assert(percent >= 0.0 && percent <= 1.0, 'Percent must be between 0.0 and 1.0');
+  }) : assert(percent >= 0.0 && percent <= 1.0,
+            'Percent must be between 0.0 and 1.0');
 
   @override
   State<LinearPercentIndicator> createState() => _LinearPercentIndicatorState();
@@ -223,6 +227,7 @@ class _LinearPercentIndicatorState extends State<LinearPercentIndicator>
         parent: _animationController,
         curve: widget.animationCurve,
       ));
+      // ignore: discarded_futures
       _animationController.forward();
       _animationController.addStatusListener(_onAnimationStatus);
     } else {
@@ -240,9 +245,10 @@ class _LinearPercentIndicatorState extends State<LinearPercentIndicator>
   @override
   void didUpdateWidget(LinearPercentIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
-    
+
     if (oldWidget.animationDuration != widget.animationDuration) {
-      _animationController.duration = Duration(milliseconds: widget.animationDuration);
+      _animationController.duration =
+          Duration(milliseconds: widget.animationDuration);
     }
 
     if (oldWidget.percent != widget.percent) {
@@ -258,14 +264,18 @@ class _LinearPercentIndicatorState extends State<LinearPercentIndicator>
           ));
         } else {
           _animation = Tween<double>(
-            begin: widget.animateFromLastPercent ? _previousPercent : oldWidget.percent,
+            begin: widget.animateFromLastPercent
+                ? _previousPercent
+                : oldWidget.percent,
             end: widget.percent,
           ).animate(CurvedAnimation(
             parent: _animationController,
             curve: widget.animationCurve,
           ));
+          // ignore: discarded_futures
           _animationController.reset();
         }
+        // ignore: discarded_futures
         _animationController.forward();
       } else {
         _animation = AlwaysStoppedAnimation(widget.percent);
@@ -328,12 +338,14 @@ class _LinearPercentIndicatorState extends State<LinearPercentIndicator>
     return LayoutBuilder(
       builder: (context, constraints) {
         final effectiveWidth = widget.width ?? constraints.maxWidth;
-        
-        Widget progressBar = Container(
+
+        final progressBar = Container(
           width: effectiveWidth,
           height: widget.lineHeight,
           decoration: BoxDecoration(
-            color: widget.backgroundGradient == null ? widget.backgroundColor : null,
+            color: widget.backgroundGradient == null
+                ? widget.backgroundColor
+                : null,
             gradient: widget.backgroundGradient,
             borderRadius: effectiveBorderRadius,
           ),
@@ -347,20 +359,21 @@ class _LinearPercentIndicatorState extends State<LinearPercentIndicator>
                 else
                   // Single progress bar
                   _buildSingleProgress(effectiveWidth, currentPercent),
-                
+
                 // Center widget or percentage
                 if (widget.center != null || widget.showPercentage)
                   Positioned.fill(
                     child: Center(
-                      child: widget.center ?? Text(
-                        _formatPercent(currentPercent),
-                        style: widget.percentageTextStyle ??
-                            TextStyle(
-                              fontSize: widget.lineHeight * 0.7,
-                              fontWeight: FontWeight.bold,
-                              color: _getTextColor(currentPercent),
-                            ),
-                      ),
+                      child: widget.center ??
+                          Text(
+                            _formatPercent(currentPercent),
+                            style: widget.percentageTextStyle ??
+                                TextStyle(
+                                  fontSize: widget.lineHeight * 0.7,
+                                  fontWeight: FontWeight.bold,
+                                  color: _getTextColor(currentPercent),
+                                ),
+                          ),
                     ),
                   ),
               ],
@@ -369,7 +382,8 @@ class _LinearPercentIndicatorState extends State<LinearPercentIndicator>
         );
 
         // Handle child position for leading/trailing
-        if (widget.childPosition == LinearChildPosition.left && widget.leading != null) {
+        if (widget.childPosition == LinearChildPosition.left &&
+            widget.leading != null) {
           return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -378,7 +392,8 @@ class _LinearPercentIndicatorState extends State<LinearPercentIndicator>
               Expanded(child: progressBar),
             ],
           );
-        } else if (widget.childPosition == LinearChildPosition.right && widget.trailing != null) {
+        } else if (widget.childPosition == LinearChildPosition.right &&
+            widget.trailing != null) {
           return Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -398,8 +413,8 @@ class _LinearPercentIndicatorState extends State<LinearPercentIndicator>
     return Align(
       alignment: widget.isRTL ? Alignment.centerRight : Alignment.centerLeft,
       child: AnimatedContainer(
-        duration: widget.animation 
-            ? Duration.zero 
+        duration: widget.animation
+            ? Duration.zero
             : Duration(milliseconds: widget.animationDuration),
         width: width * percent,
         height: widget.lineHeight,
@@ -413,12 +428,12 @@ class _LinearPercentIndicatorState extends State<LinearPercentIndicator>
 
   List<Widget> _buildSegments(double width, double currentPercent) {
     final segments = <Widget>[];
-    
+
     for (final segment in widget.segments!) {
       // Only show segment up to current percent
       final effectiveEnd = segment.end.clamp(0.0, currentPercent);
       if (effectiveEnd <= segment.start) continue;
-      
+
       final segmentWidth = (effectiveEnd - segment.start) * width;
       final segmentLeft = segment.start * width;
 
@@ -510,6 +525,7 @@ class MultiSegmentLinearIndicator extends StatefulWidget {
   final EdgeInsets padding;
 
   /// Creates a multi-segment linear indicator.
+  // ignore: sort_constructors_first
   const MultiSegmentLinearIndicator({
     super.key,
     required this.segments,
@@ -528,10 +544,12 @@ class MultiSegmentLinearIndicator extends StatefulWidget {
   });
 
   @override
-  State<MultiSegmentLinearIndicator> createState() => _MultiSegmentLinearIndicatorState();
+  State<MultiSegmentLinearIndicator> createState() =>
+      _MultiSegmentLinearIndicatorState();
 }
 
-class _MultiSegmentLinearIndicatorState extends State<MultiSegmentLinearIndicator>
+class _MultiSegmentLinearIndicatorState
+    extends State<MultiSegmentLinearIndicator>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
@@ -546,8 +564,10 @@ class _MultiSegmentLinearIndicatorState extends State<MultiSegmentLinearIndicato
 
     if (widget.animation) {
       _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: _animationController, curve: widget.animationCurve),
+        CurvedAnimation(
+            parent: _animationController, curve: widget.animationCurve),
       );
+      // ignore: discarded_futures
       _animationController.forward();
     } else {
       _animation = const AlwaysStoppedAnimation(1.0);
@@ -562,8 +582,8 @@ class _MultiSegmentLinearIndicatorState extends State<MultiSegmentLinearIndicato
 
   @override
   Widget build(BuildContext context) {
-    final effectiveBorderRadius = widget.borderRadius ?? 
-        BorderRadius.circular(widget.lineHeight / 2);
+    final effectiveBorderRadius =
+        widget.borderRadius ?? BorderRadius.circular(widget.lineHeight / 2);
 
     return Padding(
       padding: widget.padding,
@@ -579,9 +599,10 @@ class _MultiSegmentLinearIndicatorState extends State<MultiSegmentLinearIndicato
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Labels above
-                  if (widget.showLabels && widget.labelPosition == LinearChildPosition.left)
+                  if (widget.showLabels &&
+                      widget.labelPosition == LinearChildPosition.left)
                     _buildLabels(effectiveWidth),
-                  
+
                   // Progress bar
                   Container(
                     width: effectiveWidth,
@@ -594,8 +615,9 @@ class _MultiSegmentLinearIndicatorState extends State<MultiSegmentLinearIndicato
                       borderRadius: effectiveBorderRadius,
                       child: Stack(
                         children: widget.segments.map((segment) {
-                          final segmentWidth = (segment.end - segment.start) * 
-                              effectiveWidth * _animation.value;
+                          final segmentWidth = (segment.end - segment.start) *
+                              effectiveWidth *
+                              _animation.value;
                           final segmentLeft = segment.start * effectiveWidth;
 
                           return Positioned(
@@ -604,14 +626,18 @@ class _MultiSegmentLinearIndicatorState extends State<MultiSegmentLinearIndicato
                             bottom: 0,
                             child: Container(
                               width: segmentWidth,
-                              margin: EdgeInsets.only(right: widget.segmentSpacing),
+                              margin:
+                                  EdgeInsets.only(right: widget.segmentSpacing),
                               decoration: BoxDecoration(
-                                color: segment.gradient == null ? segment.color : null,
+                                color: segment.gradient == null
+                                    ? segment.color
+                                    : null,
                                 gradient: segment.gradient,
                               ),
-                              child: widget.showLabels && 
-                                     widget.labelPosition == LinearChildPosition.center &&
-                                     segment.label != null
+                              child: widget.showLabels &&
+                                      widget.labelPosition ==
+                                          LinearChildPosition.center &&
+                                      segment.label != null
                                   ? Center(
                                       child: Text(
                                         segment.label!,
@@ -633,7 +659,8 @@ class _MultiSegmentLinearIndicatorState extends State<MultiSegmentLinearIndicato
                   ),
 
                   // Labels below
-                  if (widget.showLabels && widget.labelPosition == LinearChildPosition.right)
+                  if (widget.showLabels &&
+                      widget.labelPosition == LinearChildPosition.right)
                     _buildLabels(effectiveWidth),
                 ],
               );

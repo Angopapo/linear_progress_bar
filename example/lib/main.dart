@@ -131,7 +131,6 @@ class _LinearProgressExamplesState extends State<LinearProgressExamples> {
               minHeight: 10,
             ),
           ),
-
           _buildSectionTitle('Rounded Corners'),
           _buildExampleCard(
             'With Border Radius',
@@ -145,7 +144,6 @@ class _LinearProgressExamplesState extends State<LinearProgressExamples> {
               minHeight: 16,
             ),
           ),
-
           _buildSectionTitle('Different Heights'),
           _buildExampleCard(
             'Thin (4px)',
@@ -185,7 +183,6 @@ class _LinearProgressExamplesState extends State<LinearProgressExamples> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-
           _buildSectionTitle('Gradient Progress'),
           _buildExampleCard(
             'Gradient Bar',
@@ -201,7 +198,6 @@ class _LinearProgressExamplesState extends State<LinearProgressExamples> {
               borderRadius: BorderRadius.circular(8),
             ),
           ),
-
           const SizedBox(height: 24),
           _buildControlButtons(),
         ],
@@ -214,9 +210,8 @@ class _LinearProgressExamplesState extends State<LinearProgressExamples> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton.icon(
-          onPressed: _currentStep > 0
-              ? () => setState(() => _currentStep--)
-              : null,
+          onPressed:
+              _currentStep > 0 ? () => setState(() => _currentStep--) : null,
           icon: const Icon(Icons.remove),
           label: const Text('Decrease'),
         ),
@@ -299,7 +294,6 @@ class _DotsProgressExamplesState extends State<DotsProgressExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Custom Sizes'),
           _buildExampleCard(
             'Large Active Dot',
@@ -315,7 +309,6 @@ class _DotsProgressExamplesState extends State<DotsProgressExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Custom Spacing'),
           _buildExampleCard(
             'Wide Spacing',
@@ -330,7 +323,6 @@ class _DotsProgressExamplesState extends State<DotsProgressExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Vertical Dots'),
           _buildExampleCard(
             'Vertical Layout',
@@ -350,7 +342,6 @@ class _DotsProgressExamplesState extends State<DotsProgressExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Interactive Dots'),
           _buildExampleCard(
             'Tap to Change Step',
@@ -369,7 +360,6 @@ class _DotsProgressExamplesState extends State<DotsProgressExamples> {
               ),
             ),
           ),
-
           const SizedBox(height: 24),
           _buildControlButtons(),
         ],
@@ -382,9 +372,8 @@ class _DotsProgressExamplesState extends State<DotsProgressExamples> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton.icon(
-          onPressed: _currentStep > 0
-              ? () => setState(() => _currentStep--)
-              : null,
+          onPressed:
+              _currentStep > 0 ? () => setState(() => _currentStep--) : null,
           icon: const Icon(Icons.remove),
           label: const Text('Previous'),
         ),
@@ -468,7 +457,6 @@ class _TitledProgressExamplesState extends State<TitledProgressExamples> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-
           _buildSectionTitle('Percentage Display'),
           _buildExampleCard(
             'Show Percentage',
@@ -484,7 +472,6 @@ class _TitledProgressExamplesState extends State<TitledProgressExamples> {
               borderRadius: BorderRadius.circular(14),
             ),
           ),
-
           _buildSectionTitle('Step Count'),
           _buildExampleCard(
             'Show Step Count',
@@ -499,7 +486,6 @@ class _TitledProgressExamplesState extends State<TitledProgressExamples> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-
           _buildSectionTitle('Label Positions'),
           _buildExampleCard(
             'Label on Top',
@@ -515,7 +501,6 @@ class _TitledProgressExamplesState extends State<TitledProgressExamples> {
               borderRadius: BorderRadius.circular(6),
             ),
           ),
-
           _buildSectionTitle('With Gradient'),
           _buildExampleCard(
             'Gradient + Percentage',
@@ -533,7 +518,6 @@ class _TitledProgressExamplesState extends State<TitledProgressExamples> {
               borderRadius: BorderRadius.circular(14),
             ),
           ),
-
           const SizedBox(height: 24),
           _buildSlider(),
         ],
@@ -601,7 +585,8 @@ class CircularPercentExamples extends StatefulWidget {
   const CircularPercentExamples({super.key});
 
   @override
-  State<CircularPercentExamples> createState() => _CircularPercentExamplesState();
+  State<CircularPercentExamples> createState() =>
+      _CircularPercentExamplesState();
 }
 
 class _CircularPercentExamplesState extends State<CircularPercentExamples> {
@@ -636,7 +621,6 @@ class _CircularPercentExamplesState extends State<CircularPercentExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Gradient Circular'),
           _buildExampleCard(
             'With Gradient Colors',
@@ -672,7 +656,6 @@ class _CircularPercentExamplesState extends State<CircularPercentExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Different Sizes'),
           _buildExampleCard(
             'Small, Medium, Large',
@@ -687,7 +670,8 @@ class _CircularPercentExamplesState extends State<CircularPercentExamples> {
                   backgroundColor: Colors.grey.shade300,
                   center: Text(
                     '${(_percent * 100).toInt()}%',
-                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 10, fontWeight: FontWeight.bold),
                   ),
                 ),
                 CircularPercentIndicator(
@@ -698,7 +682,8 @@ class _CircularPercentExamplesState extends State<CircularPercentExamples> {
                   backgroundColor: Colors.grey.shade300,
                   center: Text(
                     '${(_percent * 100).toInt()}%',
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
                 CircularPercentIndicator(
@@ -709,13 +694,13 @@ class _CircularPercentExamplesState extends State<CircularPercentExamples> {
                   backgroundColor: Colors.grey.shade300,
                   center: Text(
                     '${(_percent * 100).toInt()}%',
-                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
             ),
           ),
-
           _buildSectionTitle('With Header & Footer'),
           _buildExampleCard(
             'Download Progress',
@@ -734,7 +719,8 @@ class _CircularPercentExamplesState extends State<CircularPercentExamples> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                center: const Icon(Icons.download, size: 32, color: Colors.green),
+                center:
+                    const Icon(Icons.download, size: 32, color: Colors.green),
                 footer: Padding(
                   padding: const EdgeInsets.only(top: 4),
                   child: Text(
@@ -749,7 +735,6 @@ class _CircularPercentExamplesState extends State<CircularPercentExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Different Start Angles'),
           _buildExampleCard(
             'Start from Different Positions',
@@ -815,7 +800,6 @@ class _CircularPercentExamplesState extends State<CircularPercentExamples> {
               ],
             ),
           ),
-
           _buildSectionTitle('Filled Background'),
           _buildExampleCard(
             'With Circle Fill',
@@ -832,7 +816,8 @@ class _CircularPercentExamplesState extends State<CircularPercentExamples> {
                 center: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.battery_charging_full, color: Colors.blue, size: 28),
+                    const Icon(Icons.battery_charging_full,
+                        color: Colors.blue, size: 28),
                     Text(
                       '${(_percent * 100).toInt()}%',
                       style: const TextStyle(
@@ -846,7 +831,6 @@ class _CircularPercentExamplesState extends State<CircularPercentExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Reversed Direction'),
           _buildExampleCard(
             'Counter-clockwise',
@@ -884,7 +868,6 @@ class _CircularPercentExamplesState extends State<CircularPercentExamples> {
               ],
             ),
           ),
-
           const SizedBox(height: 24),
           _buildSlider(),
         ],
@@ -979,7 +962,6 @@ class _GaugeExamplesState extends State<GaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Speedometer Style'),
           _buildExampleCard(
             'With Needle Pointer',
@@ -1001,7 +983,6 @@ class _GaugeExamplesState extends State<GaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Half Gauge'),
           _buildExampleCard(
             '180° Sweep Angle',
@@ -1019,7 +1000,6 @@ class _GaugeExamplesState extends State<GaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Gradient Gauge'),
           _buildExampleCard(
             'With Gradient Colors',
@@ -1045,7 +1025,6 @@ class _GaugeExamplesState extends State<GaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Range Colors'),
           _buildExampleCard(
             'With Colored Ranges',
@@ -1074,7 +1053,6 @@ class _GaugeExamplesState extends State<GaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Modern Style'),
           _buildExampleCard(
             'Modern Ticked Gauge',
@@ -1098,7 +1076,6 @@ class _GaugeExamplesState extends State<GaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Custom Labels'),
           _buildExampleCard(
             'With Title and Subtitle',
@@ -1128,7 +1105,6 @@ class _GaugeExamplesState extends State<GaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Different Angles'),
           _buildExampleCard(
             'Various Sweep Angles',
@@ -1183,7 +1159,6 @@ class _GaugeExamplesState extends State<GaugeExamples> {
               ],
             ),
           ),
-
           const SizedBox(height: 24),
           _buildSlider(),
         ],
@@ -1251,7 +1226,8 @@ class AnimatedProgressExamples extends StatefulWidget {
   const AnimatedProgressExamples({super.key});
 
   @override
-  State<AnimatedProgressExamples> createState() => _AnimatedProgressExamplesState();
+  State<AnimatedProgressExamples> createState() =>
+      _AnimatedProgressExamplesState();
 }
 
 class _AnimatedProgressExamplesState extends State<AnimatedProgressExamples> {
@@ -1279,7 +1255,6 @@ class _AnimatedProgressExamplesState extends State<AnimatedProgressExamples> {
               animationDuration: const Duration(milliseconds: 500),
             ),
           ),
-
           _buildSectionTitle('Animated Circular'),
           _buildExampleCard(
             'Circular Animation',
@@ -1305,7 +1280,6 @@ class _AnimatedProgressExamplesState extends State<AnimatedProgressExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Animated Gauge'),
           _buildExampleCard(
             'Gauge with Animation',
@@ -1326,7 +1300,6 @@ class _AnimatedProgressExamplesState extends State<AnimatedProgressExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Different Animation Curves'),
           _buildExampleCard(
             'Bounce Effect',
@@ -1350,7 +1323,6 @@ class _AnimatedProgressExamplesState extends State<AnimatedProgressExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Gradient with Animation'),
           _buildExampleCard(
             'Animated Gradient Progress',
@@ -1391,7 +1363,6 @@ class _AnimatedProgressExamplesState extends State<AnimatedProgressExamples> {
               ],
             ),
           ),
-
           const SizedBox(height: 24),
           _buildAnimationControls(),
         ],
@@ -1510,7 +1481,6 @@ class _LinearGaugeExamplesState extends State<LinearGaugeExamples> {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-
           _buildSectionTitle('With Ruler Style'),
           _buildExampleCard(
             'Graduated Ruler',
@@ -1525,7 +1495,6 @@ class _LinearGaugeExamplesState extends State<LinearGaugeExamples> {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-
           _buildSectionTitle('With Pointer'),
           _buildExampleCard(
             'Triangle Pointer',
@@ -1543,7 +1512,6 @@ class _LinearGaugeExamplesState extends State<LinearGaugeExamples> {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-
           _buildSectionTitle('With Ranges'),
           _buildExampleCard(
             'Color Ranges',
@@ -1566,7 +1534,6 @@ class _LinearGaugeExamplesState extends State<LinearGaugeExamples> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-
           _buildSectionTitle('Interactive Gauge'),
           _buildExampleCard(
             'Drag to Change Value',
@@ -1588,7 +1555,6 @@ class _LinearGaugeExamplesState extends State<LinearGaugeExamples> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-
           _buildSectionTitle('Vertical Orientation'),
           _buildExampleCard(
             'Vertical Linear Gauge',
@@ -1612,7 +1578,6 @@ class _LinearGaugeExamplesState extends State<LinearGaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Gradient Value Bar'),
           _buildExampleCard(
             'With Gradient',
@@ -1627,7 +1592,6 @@ class _LinearGaugeExamplesState extends State<LinearGaugeExamples> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-
           const SizedBox(height: 24),
           _buildSlider(),
         ],
@@ -1722,7 +1686,6 @@ class _RadialGaugeExamplesState extends State<RadialGaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('With Needle Pointer'),
           _buildExampleCard(
             'Tapered Needle',
@@ -1744,7 +1707,6 @@ class _RadialGaugeExamplesState extends State<RadialGaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('With Shape Pointer'),
           _buildExampleCard(
             'Triangle Shape Pointer',
@@ -1765,7 +1727,6 @@ class _RadialGaugeExamplesState extends State<RadialGaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('With Ranges'),
           _buildExampleCard(
             'Colored Ranges',
@@ -1778,7 +1739,8 @@ class _RadialGaugeExamplesState extends State<RadialGaugeExamples> {
                 backgroundColor: Colors.grey.shade200,
                 ranges: const [
                   RadialGaugeRange(start: 0.0, end: 0.33, color: Colors.green),
-                  RadialGaugeRange(start: 0.33, end: 0.66, color: Colors.orange),
+                  RadialGaugeRange(
+                      start: 0.33, end: 0.66, color: Colors.orange),
                   RadialGaugeRange(start: 0.66, end: 1.0, color: Colors.red),
                 ],
                 needle: const NeedleConfig(
@@ -1790,7 +1752,6 @@ class _RadialGaugeExamplesState extends State<RadialGaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Interactive Gauge'),
           _buildExampleCard(
             'Drag to Change Value',
@@ -1814,7 +1775,6 @@ class _RadialGaugeExamplesState extends State<RadialGaugeExamples> {
               ),
             ),
           ),
-
           _buildSectionTitle('Different Positions'),
           _buildExampleCard(
             'Start from Top/Bottom/Left/Right',
@@ -1876,7 +1836,6 @@ class _RadialGaugeExamplesState extends State<RadialGaugeExamples> {
               ],
             ),
           ),
-
           _buildSectionTitle('With Ticks'),
           _buildExampleCard(
             'Tick Marks and Labels',
@@ -1898,7 +1857,6 @@ class _RadialGaugeExamplesState extends State<RadialGaugeExamples> {
               ),
             ),
           ),
-
           const SizedBox(height: 24),
           _buildSlider(),
         ],
@@ -1990,7 +1948,6 @@ class _LinearPercentExamplesState extends State<LinearPercentExamples> {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-
           _buildSectionTitle('With Percentage Display'),
           _buildExampleCard(
             'Show Percentage',
@@ -2003,7 +1960,6 @@ class _LinearPercentExamplesState extends State<LinearPercentExamples> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-
           _buildSectionTitle('With Leading & Trailing'),
           _buildExampleCard(
             'Download Progress',
@@ -2018,7 +1974,6 @@ class _LinearPercentExamplesState extends State<LinearPercentExamples> {
               animation: true,
             ),
           ),
-
           _buildSectionTitle('With Center Widget'),
           _buildExampleCard(
             'Center Label',
@@ -2029,13 +1984,13 @@ class _LinearPercentExamplesState extends State<LinearPercentExamples> {
               backgroundColor: Colors.grey.shade300,
               center: Text(
                 'Loading... ${(_percent * 100).toInt()}%',
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
               ),
               borderRadius: BorderRadius.circular(15),
               animation: true,
             ),
           ),
-
           _buildSectionTitle('With Gradient'),
           _buildExampleCard(
             'Gradient Progress',
@@ -2050,15 +2005,23 @@ class _LinearPercentExamplesState extends State<LinearPercentExamples> {
               animation: true,
             ),
           ),
-
           _buildSectionTitle('Multi-Segment Indicator'),
           _buildExampleCard(
             'Multiple Segments',
             MultiSegmentLinearIndicator(
               segments: const [
-                LinearSegment(start: 0.0, end: 0.25, color: Colors.green, label: 'Done'),
-                LinearSegment(start: 0.25, end: 0.55, color: Colors.yellow, label: 'Progress'),
-                LinearSegment(start: 0.55, end: 0.8, color: Colors.orange, label: 'Pending'),
+                LinearSegment(
+                    start: 0.0, end: 0.25, color: Colors.green, label: 'Done'),
+                LinearSegment(
+                    start: 0.25,
+                    end: 0.55,
+                    color: Colors.yellow,
+                    label: 'Progress'),
+                LinearSegment(
+                    start: 0.55,
+                    end: 0.8,
+                    color: Colors.orange,
+                    label: 'Pending'),
               ],
               lineHeight: 30,
               backgroundColor: Colors.grey.shade200,
@@ -2067,7 +2030,6 @@ class _LinearPercentExamplesState extends State<LinearPercentExamples> {
               labelPosition: LinearChildPosition.center,
             ),
           ),
-
           _buildSectionTitle('RTL Support'),
           _buildExampleCard(
             'Right to Left',
@@ -2081,7 +2043,6 @@ class _LinearPercentExamplesState extends State<LinearPercentExamples> {
               borderRadius: BorderRadius.circular(10),
             ),
           ),
-
           _buildSectionTitle('Different Sizes'),
           _buildExampleCard(
             'Thin, Medium, Thick',
@@ -2114,7 +2075,6 @@ class _LinearPercentExamplesState extends State<LinearPercentExamples> {
               ],
             ),
           ),
-
           _buildSectionTitle('With Animation'),
           _buildExampleCard(
             'Animated Progress',
@@ -2130,7 +2090,6 @@ class _LinearPercentExamplesState extends State<LinearPercentExamples> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-
           const SizedBox(height: 24),
           _buildSlider(),
         ],

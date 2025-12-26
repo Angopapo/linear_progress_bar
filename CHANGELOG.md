@@ -31,6 +31,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Gradient support
   - Smooth animations
   
+- **LinearPercentIndicator** - Linear progress indicator with:
+  - Leading, trailing, and center widget slots
+  - Child positioning (left, right, center)
+  - Multi-segment support
+  - Gradient progress
+  - RTL (right-to-left) support
+  - Smooth animations with customizable duration and curve
+  - Percentage display option
+  - Customizable line height and width
+  
+- **MultiSegmentLinearIndicator** - Multi-segment linear progress indicator with:
+  - Multiple progress segments in a single bar
+  - Individual colors and labels for each segment
+  - Smooth animations
+  - Label positioning options
+  
+- **LinearGauge** - Linear gauge with:
+  - Horizontal and vertical orientations
+  - Ruler styles (none, simple, labeled, graduated, bothSides)
+  - Pointer types (triangle, diamond, arrow, circle, rectangle, invertedTriangle)
+  - Value bar with gradient support
+  - Range coloring for different value segments
+  - Animation and interactivity (drag to change value)
+  - Customizable tick marks and labels
+  - Min/max value labels
+  
+- **RadialGauge** - Radial gauge with:
+  - Customizable start position (top, right, bottom, left, custom angle)
+  - Needle pointer styles (simple, tapered, triangle, diamond, flat, compass)
+  - Shape pointer types (circle, triangle, diamond, rectangle, arrow, invertedTriangle)
+  - Value bar with gradient support
+  - Range coloring for different value segments
+  - Tick marks with labels
+  - Animation and interactivity (drag to change value)
+  - Customizable sweep angle and track width
+  
 - **GaugeDecorator** - Preset configurations for gauges:
   - `GaugeDecorator.speedometer()` - Speedometer style with ranges
   - `GaugeDecorator.minimal()` - Clean minimal half-gauge
@@ -49,11 +85,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `GaugeLabelPosition` - center, bottom, none
   - `CircularStrokeCap` - round, square, butt
   - `CircularStartAngle` - top, right, bottom, left
+  - `CircularChildPosition` - center, top, bottom
   - `ArcType` - half, full
+  - `LinearGaugeOrientation` - horizontal, vertical
+  - `RulerStyle` - none, simple, labeled, graduated, bothSides
+  - `RulerPosition` - start, end, both
+  - `PointerStyle` - none, triangle, diamond, arrow, circle, rectangle, invertedTriangle
+  - `PointerPosition` - start, center, end
+  - `RadialGaugePosition` - top, right, bottom, left, custom
+  - `NeedleStyle` - none, simple, tapered, triangle, diamond, flat, compass
+  - `ShapePointerStyle` - none, circle, triangle, diamond, rectangle, arrow, invertedTriangle
+  - `ShapePointerPosition` - inner, center, outer
+  - `LinearChildPosition` - left, right, center
 
 - **Helper Classes**:
   - `GaugeRange` - Define color ranges for gauge
   - `GaugeSegment` - Define segments for segmented gauge
+  - `LinearGaugeRange` - Define color ranges for linear gauge
+  - `RadialGaugeRange` - Define color ranges for radial gauge
+  - `LinearSegment` - Define segments for multi-segment linear indicator
+  - `PointerConfig` - Configuration for linear gauge pointer
+  - `NeedleConfig` - Configuration for radial gauge needle
+  - `ShapePointerConfig` - Configuration for radial gauge shape pointer
 
 - Comprehensive test coverage for all new widgets
 - Updated example app with new Circular and Gauge tabs

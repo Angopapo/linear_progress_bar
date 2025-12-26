@@ -106,11 +106,11 @@ export 'src/progress_bar.dart';
 export 'src/titled_progress_bar.dart';
 
 // Export UI components
-export 'ui/dots_indicator.dart';
 export 'ui/circular_percent_indicator.dart';
-export 'ui/linear_percent_indicator.dart';
+export 'ui/dots_indicator.dart';
 export 'ui/gauge_indicator.dart';
 export 'ui/linear_gauge.dart';
+export 'ui/linear_percent_indicator.dart';
 export 'ui/radial_gauge.dart';
 
 // Export utilities

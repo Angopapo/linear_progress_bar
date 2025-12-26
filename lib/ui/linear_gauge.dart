@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter/gestures.dart';
 
 /// Orientation of the linear gauge.
 enum LinearGaugeOrientation {
@@ -95,15 +94,17 @@ class LinearGaugeRange {
   final double? sizeRatio;
 
   /// Creates a linear gauge range.
+  // ignore: sort_constructors_first
   const LinearGaugeRange({
     required this.start,
     required this.end,
     required this.color,
     this.label,
     this.sizeRatio,
-  }) : assert(start >= 0.0 && start <= 1.0, 'start must be between 0.0 and 1.0'),
-       assert(end >= 0.0 && end <= 1.0, 'end must be between 0.0 and 1.0'),
-       assert(start <= end, 'start must be <= end');
+  })  : assert(
+            start >= 0.0 && start <= 1.0, 'start must be between 0.0 and 1.0'),
+        assert(end >= 0.0 && end <= 1.0, 'end must be between 0.0 and 1.0'),
+        assert(start <= end, 'start must be <= end');
 }
 
 /// Configuration for the pointer widget.
@@ -133,6 +134,7 @@ class PointerConfig {
   final bool hasShadow;
 
   /// Creates a pointer configuration.
+  // ignore: sort_constructors_first
   const PointerConfig({
     this.style = PointerStyle.triangle,
     this.color = Colors.red,
@@ -291,6 +293,7 @@ class LinearGauge extends StatefulWidget {
   final EdgeInsets padding;
 
   /// Creates a linear gauge widget.
+  // ignore: sort_constructors_first
   const LinearGauge({
     super.key,
     this.value = 0.0,
@@ -331,7 +334,8 @@ class LinearGauge extends StatefulWidget {
     this.valueLabelPosition = PointerPosition.start,
     this.customPointerWidget,
     this.padding = EdgeInsets.zero,
-  }) : assert(value >= 0.0 && value <= 1.0, 'Value must be between 0.0 and 1.0');
+  }) : assert(
+            value >= 0.0 && value <= 1.0, 'Value must be between 0.0 and 1.0');
 
   @override
   State<LinearGauge> createState() => _LinearGaugeState();
@@ -360,6 +364,7 @@ class _LinearGaugeState extends State<LinearGauge>
         parent: _animationController,
         curve: widget.animationCurve,
       ));
+      // ignore: discarded_futures
       _animationController.forward();
     } else {
       _animation = AlwaysStoppedAnimation(widget.value);
@@ -379,9 +384,10 @@ class _LinearGaugeState extends State<LinearGauge>
           parent: _animationController,
           curve: widget.animationCurve,
         ));
-        _animationController
-          ..reset()
-          ..forward();
+        // ignore: discarded_futures
+        _animationController.reset();
+        // ignore: discarded_futures
+        _animationController.forward();
       } else {
         _animation = AlwaysStoppedAnimation(widget.value);
       }
@@ -417,8 +423,10 @@ class _LinearGaugeState extends State<LinearGauge>
     if (widget.labelFormatter != null) {
       return widget.labelFormatter!(normalizedValue);
     }
-    final actualValue = widget.minValue + (widget.maxValue - widget.minValue) * normalizedValue;
-    return actualValue.toStringAsFixed(actualValue.truncateToDouble() == actualValue ? 0 : 1);
+    final actualValue =
+        widget.minValue + (widget.maxValue - widget.minValue) * normalizedValue;
+    return actualValue
+        .toStringAsFixed(actualValue.truncateToDouble() == actualValue ? 0 : 1);
   }
 
   @override
@@ -430,21 +438,23 @@ class _LinearGaugeState extends State<LinearGauge>
         builder: (context, child) {
           return LayoutBuilder(
             builder: (context, constraints) {
-              final isHorizontal = widget.orientation == LinearGaugeOrientation.horizontal;
-              final gaugeLength = widget.length ?? 
+              final isHorizontal =
+                  widget.orientation == LinearGaugeOrientation.horizontal;
+              final gaugeLength = widget.length ??
                   (isHorizontal ? constraints.maxWidth : constraints.maxHeight);
-              
+
               // Calculate total size needed including ruler
-              double totalThickness = widget.thickness;
+              var totalThickness = widget.thickness;
               if (widget.rulerStyle != RulerStyle.none) {
                 totalThickness += widget.majorTickLength + 10;
-                if (widget.rulerPosition == RulerPosition.both || 
+                if (widget.rulerPosition == RulerPosition.both ||
                     widget.rulerStyle == RulerStyle.bothSides) {
                   totalThickness += widget.majorTickLength + 10;
                 }
               }
               if (widget.pointer != null) {
-                totalThickness = math.max(totalThickness, widget.pointer!.size + 10);
+                totalThickness =
+                    math.max(totalThickness, widget.pointer!.size + 10);
               }
 
               final size = isHorizontal
@@ -514,31 +524,37 @@ class _LinearGaugeState extends State<LinearGauge>
 
               // Add value label if needed
               if (widget.showValueLabel) {
-                final displayValue = _isDragging ? _currentValue : _animation.value;
-                final actualValue = widget.minValue + 
+                final displayValue =
+                    _isDragging ? _currentValue : _animation.value;
+                final actualValue = widget.minValue +
                     (widget.maxValue - widget.minValue) * displayValue;
                 final label = Text(
                   actualValue.toStringAsFixed(1),
-                  style: widget.valueTextStyle ?? 
-                      const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  style: widget.valueTextStyle ??
+                      const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.bold),
                 );
 
                 if (isHorizontal) {
                   gauge = Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (widget.valueLabelPosition == PointerPosition.start) label,
+                      if (widget.valueLabelPosition == PointerPosition.start)
+                        label,
                       gauge,
-                      if (widget.valueLabelPosition == PointerPosition.end) label,
+                      if (widget.valueLabelPosition == PointerPosition.end)
+                        label,
                     ],
                   );
                 } else {
                   gauge = Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (widget.valueLabelPosition == PointerPosition.start) label,
+                      if (widget.valueLabelPosition == PointerPosition.start)
+                        label,
                       gauge,
-                      if (widget.valueLabelPosition == PointerPosition.end) label,
+                      if (widget.valueLabelPosition == PointerPosition.end)
+                        label,
                     ],
                   );
                 }
@@ -577,6 +593,7 @@ class _LinearGaugePainter extends CustomPainter {
   final String Function(double)? labelFormatter;
   final TextStyle? labelStyle;
 
+  // ignore: sort_constructors_first
   _LinearGaugePainter({
     required this.value,
     required this.orientation,
@@ -606,11 +623,12 @@ class _LinearGaugePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final isHorizontal = orientation == LinearGaugeOrientation.horizontal;
     final gaugeLength = isHorizontal ? size.width : size.height;
-    
+
     // Calculate gauge track position
     double trackOffset = 0;
     if (rulerStyle != RulerStyle.none) {
-      if (rulerPosition == RulerPosition.start || rulerPosition == RulerPosition.both) {
+      if (rulerPosition == RulerPosition.start ||
+          rulerPosition == RulerPosition.both) {
         trackOffset = majorTickLength + 5;
       }
     }
@@ -644,14 +662,15 @@ class _LinearGaugePainter extends CustomPainter {
         final rangeStart = range.start * gaugeLength;
         final rangeEnd = range.end * gaugeLength;
         final rangeLength = rangeEnd - rangeStart;
-        final rangeThickness = range.sizeRatio != null 
-            ? thickness * range.sizeRatio! 
-            : thickness;
+        final rangeThickness =
+            range.sizeRatio != null ? thickness * range.sizeRatio! : thickness;
         final rangeOffset = (thickness - rangeThickness) / 2;
 
         final rangeRect = isHorizontal
-            ? Rect.fromLTWH(rangeStart, trackOffset + rangeOffset, rangeLength, rangeThickness)
-            : Rect.fromLTWH(trackOffset + rangeOffset, size.height - rangeEnd, rangeThickness, rangeLength);
+            ? Rect.fromLTWH(rangeStart, trackOffset + rangeOffset, rangeLength,
+                rangeThickness)
+            : Rect.fromLTWH(trackOffset + rangeOffset, size.height - rangeEnd,
+                rangeThickness, rangeLength);
 
         canvas.save();
         canvas.clipRRect(bgRRect);
@@ -673,7 +692,8 @@ class _LinearGaugePainter extends CustomPainter {
       final valueLength = gaugeLength * value;
       final valueRect = isHorizontal
           ? Rect.fromLTWH(0, trackOffset, valueLength, thickness)
-          : Rect.fromLTWH(trackOffset, size.height - valueLength, thickness, valueLength);
+          : Rect.fromLTWH(
+              trackOffset, size.height - valueLength, thickness, valueLength);
 
       canvas.save();
       canvas.clipRRect(bgRRect);
@@ -692,7 +712,8 @@ class _LinearGaugePainter extends CustomPainter {
     }
   }
 
-  void _drawRuler(Canvas canvas, Size size, double trackOffset, double gaugeLength, bool isHorizontal) {
+  void _drawRuler(Canvas canvas, Size size, double trackOffset,
+      double gaugeLength, bool isHorizontal) {
     final tickPaint = Paint()
       ..color = tickColor
       ..strokeWidth = tickWidth
@@ -701,12 +722,13 @@ class _LinearGaugePainter extends CustomPainter {
     final totalTicks = (majorTickCount - 1) * (minorTicksPerMajor + 1) + 1;
     final tickSpacing = gaugeLength / (totalTicks - 1);
 
-    for (int i = 0; i < totalTicks; i++) {
+    for (var i = 0; i < totalTicks; i++) {
       final isMajor = i % (minorTicksPerMajor + 1) == 0;
       final tickLength = isMajor ? majorTickLength : minorTickLength;
       final position = i * tickSpacing;
 
-      if (rulerPosition == RulerPosition.start || rulerPosition == RulerPosition.both) {
+      if (rulerPosition == RulerPosition.start ||
+          rulerPosition == RulerPosition.both) {
         final start = isHorizontal
             ? Offset(position, trackOffset - 2)
             : Offset(trackOffset - 2, size.height - position);
@@ -716,21 +738,26 @@ class _LinearGaugePainter extends CustomPainter {
         canvas.drawLine(start, end, tickPaint);
       }
 
-      if (rulerPosition == RulerPosition.end || rulerPosition == RulerPosition.both) {
+      if (rulerPosition == RulerPosition.end ||
+          rulerPosition == RulerPosition.both) {
         final start = isHorizontal
             ? Offset(position, trackOffset + thickness + 2)
             : Offset(trackOffset + thickness + 2, size.height - position);
         final end = isHorizontal
             ? Offset(position, trackOffset + thickness + 2 + tickLength)
-            : Offset(trackOffset + thickness + 2 + tickLength, size.height - position);
+            : Offset(trackOffset + thickness + 2 + tickLength,
+                size.height - position);
         canvas.drawLine(start, end, tickPaint);
       }
 
       // Draw labels for major ticks
-      if (isMajor && (rulerStyle == RulerStyle.labeled || rulerStyle == RulerStyle.graduated)) {
+      if (isMajor &&
+          (rulerStyle == RulerStyle.labeled ||
+              rulerStyle == RulerStyle.graduated)) {
         final labelValue = i / (totalTicks - 1);
-        final labelText = labelFormatter?.call(labelValue) ?? '${(labelValue * 100).toInt()}';
-        
+        final labelText =
+            labelFormatter?.call(labelValue) ?? '${(labelValue * 100).toInt()}';
+
         final textPainter = TextPainter(
           text: TextSpan(
             text: labelText,
@@ -760,7 +787,8 @@ class _LinearGaugePainter extends CustomPainter {
     }
   }
 
-  void _drawPointer(Canvas canvas, Size size, double trackOffset, double gaugeLength, bool isHorizontal) {
+  void _drawPointer(Canvas canvas, Size size, double trackOffset,
+      double gaugeLength, bool isHorizontal) {
     if (pointer == null) return;
 
     final pointerPaint = Paint()
@@ -774,29 +802,33 @@ class _LinearGaugePainter extends CustomPainter {
         ..color = Colors.black26
         ..style = PaintingStyle.fill
         ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
-      _drawPointerShape(canvas, size, trackOffset, gaugeLength, isHorizontal, shadowPaint);
+      _drawPointerShape(
+          canvas, size, trackOffset, gaugeLength, isHorizontal, shadowPaint);
       canvas.restore();
     }
 
-    _drawPointerShape(canvas, size, trackOffset, gaugeLength, isHorizontal, pointerPaint);
+    _drawPointerShape(
+        canvas, size, trackOffset, gaugeLength, isHorizontal, pointerPaint);
 
     if (pointer!.borderColor != null && pointer!.borderWidth > 0) {
       final borderPaint = Paint()
         ..color = pointer!.borderColor!
         ..style = PaintingStyle.stroke
         ..strokeWidth = pointer!.borderWidth;
-      _drawPointerShape(canvas, size, trackOffset, gaugeLength, isHorizontal, borderPaint);
+      _drawPointerShape(
+          canvas, size, trackOffset, gaugeLength, isHorizontal, borderPaint);
     }
   }
 
-  void _drawPointerShape(Canvas canvas, Size size, double trackOffset, double gaugeLength, 
-      bool isHorizontal, Paint paint) {
+  void _drawPointerShape(Canvas canvas, Size size, double trackOffset,
+      double gaugeLength, bool isHorizontal, Paint paint) {
     if (pointer == null) return;
 
     final pointerSize = pointer!.size;
     final position = gaugeLength * value;
-    
-    double centerX, centerY;
+
+    final double centerX;
+    final double centerY;
     if (isHorizontal) {
       centerX = position;
       centerY = pointer!.position == PointerPosition.start
@@ -821,22 +853,30 @@ class _LinearGaugePainter extends CustomPainter {
         if (isHorizontal) {
           if (pointer!.position == PointerPosition.start) {
             path.moveTo(center.dx, center.dy + pointerSize / 2);
-            path.lineTo(center.dx - pointerSize / 2, center.dy - pointerSize / 2);
-            path.lineTo(center.dx + pointerSize / 2, center.dy - pointerSize / 2);
+            path.lineTo(
+                center.dx - pointerSize / 2, center.dy - pointerSize / 2);
+            path.lineTo(
+                center.dx + pointerSize / 2, center.dy - pointerSize / 2);
           } else {
             path.moveTo(center.dx, center.dy - pointerSize / 2);
-            path.lineTo(center.dx - pointerSize / 2, center.dy + pointerSize / 2);
-            path.lineTo(center.dx + pointerSize / 2, center.dy + pointerSize / 2);
+            path.lineTo(
+                center.dx - pointerSize / 2, center.dy + pointerSize / 2);
+            path.lineTo(
+                center.dx + pointerSize / 2, center.dy + pointerSize / 2);
           }
         } else {
           if (pointer!.position == PointerPosition.start) {
             path.moveTo(center.dx + pointerSize / 2, center.dy);
-            path.lineTo(center.dx - pointerSize / 2, center.dy - pointerSize / 2);
-            path.lineTo(center.dx - pointerSize / 2, center.dy + pointerSize / 2);
+            path.lineTo(
+                center.dx - pointerSize / 2, center.dy - pointerSize / 2);
+            path.lineTo(
+                center.dx - pointerSize / 2, center.dy + pointerSize / 2);
           } else {
             path.moveTo(center.dx - pointerSize / 2, center.dy);
-            path.lineTo(center.dx + pointerSize / 2, center.dy - pointerSize / 2);
-            path.lineTo(center.dx + pointerSize / 2, center.dy + pointerSize / 2);
+            path.lineTo(
+                center.dx + pointerSize / 2, center.dy - pointerSize / 2);
+            path.lineTo(
+                center.dx + pointerSize / 2, center.dy + pointerSize / 2);
           }
         }
         path.close();
@@ -848,22 +888,30 @@ class _LinearGaugePainter extends CustomPainter {
         if (isHorizontal) {
           if (pointer!.position == PointerPosition.start) {
             path.moveTo(center.dx, center.dy - pointerSize / 2);
-            path.lineTo(center.dx - pointerSize / 2, center.dy + pointerSize / 2);
-            path.lineTo(center.dx + pointerSize / 2, center.dy + pointerSize / 2);
+            path.lineTo(
+                center.dx - pointerSize / 2, center.dy + pointerSize / 2);
+            path.lineTo(
+                center.dx + pointerSize / 2, center.dy + pointerSize / 2);
           } else {
             path.moveTo(center.dx, center.dy + pointerSize / 2);
-            path.lineTo(center.dx - pointerSize / 2, center.dy - pointerSize / 2);
-            path.lineTo(center.dx + pointerSize / 2, center.dy - pointerSize / 2);
+            path.lineTo(
+                center.dx - pointerSize / 2, center.dy - pointerSize / 2);
+            path.lineTo(
+                center.dx + pointerSize / 2, center.dy - pointerSize / 2);
           }
         } else {
           if (pointer!.position == PointerPosition.start) {
             path.moveTo(center.dx - pointerSize / 2, center.dy);
-            path.lineTo(center.dx + pointerSize / 2, center.dy - pointerSize / 2);
-            path.lineTo(center.dx + pointerSize / 2, center.dy + pointerSize / 2);
+            path.lineTo(
+                center.dx + pointerSize / 2, center.dy - pointerSize / 2);
+            path.lineTo(
+                center.dx + pointerSize / 2, center.dy + pointerSize / 2);
           } else {
             path.moveTo(center.dx + pointerSize / 2, center.dy);
-            path.lineTo(center.dx - pointerSize / 2, center.dy - pointerSize / 2);
-            path.lineTo(center.dx - pointerSize / 2, center.dy + pointerSize / 2);
+            path.lineTo(
+                center.dx - pointerSize / 2, center.dy - pointerSize / 2);
+            path.lineTo(
+                center.dx - pointerSize / 2, center.dy + pointerSize / 2);
           }
         }
         path.close();
