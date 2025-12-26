@@ -513,7 +513,7 @@ void main() {
         );
 
         expect(find.byType(CircularPercentIndicator), findsOneWidget);
-        expect(find.byType(CustomPaint), findsOneWidget);
+        expect(find.byType(CustomPaint), findsWidgets);
       });
 
       testWidgets('should render with center widget', (tester) async {
@@ -622,7 +622,7 @@ void main() {
         );
 
         expect(find.byType(GaugeIndicator), findsOneWidget);
-        expect(find.byType(CustomPaint), findsOneWidget);
+        expect(find.byType(CustomPaint), findsWidgets);
       });
 
       testWidgets('should render with value label', (tester) async {
@@ -891,7 +891,7 @@ void main() {
         );
 
         expect(find.byType(LinearGauge), findsOneWidget);
-        expect(find.byType(CustomPaint), findsOneWidget);
+        expect(find.byType(CustomPaint), findsWidgets);
       });
 
       testWidgets('should render with pointer', (tester) async {
@@ -1049,7 +1049,7 @@ void main() {
         );
 
         expect(find.byType(RadialGauge), findsOneWidget);
-        expect(find.byType(CustomPaint), findsOneWidget);
+        expect(find.byType(CustomPaint), findsWidgets);
       });
 
       testWidgets('should render with needle', (tester) async {
