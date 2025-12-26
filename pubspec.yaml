@@ -1,6 +1,6 @@
 name: linear_progress_bar
-description: A powerful and customizable linear progress bar widget for Flutter. Supports linear bars, dots indicators, titled progress, gradients, and animations.
-version: 2.0.0+2
+description: A powerful and customizable progress indicator library for Flutter. Supports linear bars, circular percent indicators, gauges, dots indicators, titled progress, gradients, and animations.
+version: 3.0.0
 homepage: https://www.angopapo.com
 repository: https://github.com/Angopapo/linear_progress_bar
 issue_tracker: https://github.com/Angopapo/linear_progress_bar/issues

@@ -5,6 +5,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2025-12-26
+
+### Added
+
+- **CircularPercentIndicator** - Beautiful circular progress indicator with:
+  - Customizable radius and line width
+  - Gradient support
+  - Multiple start angles (top, right, bottom, left)
+  - Reversible direction
+  - Smooth animations with customizable duration and curve
+  - Center, header, and footer widget slots
+  - Filled background option
+  - Round, square, or butt stroke caps
+  
+- **GaugeIndicator** - Modern speedometer-style gauge with:
+  - Multiple styles (simple, ticked, segmented, modern)
+  - Needle pointer with customizable color
+  - Color ranges for different value segments
+  - Custom value formatter
+  - Min/max labels
+  - Title and subtitle widgets
+  - Configurable start and sweep angles
+  - Tick marks with customizable count and length
+  - Gradient support
+  - Smooth animations
+  
+- **GaugeDecorator** - Preset configurations for gauges:
+  - `GaugeDecorator.speedometer()` - Speedometer style with ranges
+  - `GaugeDecorator.minimal()` - Clean minimal half-gauge
+  - `GaugeDecorator.gradient()` - Modern gradient gauge
+  - `GaugeDecorator.health()` - Health/fitness style
+  - `GaugeDecorator.temperature()` - Temperature gauge style
+  
+- **CircularDecorator** - Preset configurations for circular indicators:
+  - `CircularDecorator.gradient()` - Gradient style
+  - `CircularDecorator.minimal()` - Minimal flat style
+  - `CircularDecorator.thick()` - Thick line style
+  - `CircularDecorator.thin()` - Thin line style
+
+- **New Enums**:
+  - `GaugeStyle` - simple, ticked, segmented, modern
+  - `GaugeLabelPosition` - center, bottom, none
+  - `CircularStrokeCap` - round, square, butt
+  - `CircularStartAngle` - top, right, bottom, left
+  - `ArcType` - half, full
+
+- **Helper Classes**:
+  - `GaugeRange` - Define color ranges for gauge
+  - `GaugeSegment` - Define segments for segmented gauge
+
+- Comprehensive test coverage for all new widgets
+- Updated example app with new Circular and Gauge tabs
+- Updated README with complete documentation
+
+### Changed
+
+- Updated package description to reflect new features
+- Cleaned up debug logging code from progress_bar.dart and titled_progress_bar.dart
+- Improved code organization with separate files for new widgets
+
 ## [2.0.0+2] - 2025-12-26
 
 ### Fixed

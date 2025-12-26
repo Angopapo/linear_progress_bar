@@ -1,10 +1,14 @@
-// A powerful and customizable linear progress bar library for Flutter.
+// A powerful and customizable progress indicator library for Flutter.
 //
-// This library provides flexible progress bar widgets including:
+// This library provides flexible progress widgets including:
 // - [LinearProgressBar] - A customizable linear or dots progress indicator
 // - [TitledProgressBar] - A progress bar with built-in label support
 // - [DotsIndicator] - A standalone dots/step indicator widget
+// - [CircularPercentIndicator] - A circular progress indicator with percentage
+// - [GaugeIndicator] - A gauge/speedometer-style progress indicator
 // - [DotsDecorator] - Configuration class for dots appearance
+// - [GaugeDecorator] - Configuration class for gauge appearance
+// - [CircularDecorator] - Configuration class for circular indicator appearance
 //
 // Example usage:
 // ```dart
@@ -18,11 +22,21 @@
 //   progressColor: Colors.blue,
 // )
 //
-// // Dots indicator
-// LinearProgressBar(
-//   maxSteps: 5,
-//   currentStep: 2,
-//   progressType: ProgressType.dots,
+// // Circular percent indicator
+// CircularPercentIndicator(
+//   percent: 0.75,
+//   radius: 60,
+//   lineWidth: 10,
+//   progressColor: Colors.blue,
+//   center: Text('75%'),
+// )
+//
+// // Gauge indicator
+// GaugeIndicator(
+//   value: 0.65,
+//   size: 200,
+//   showValue: true,
+//   gaugeStyle: GaugeStyle.modern,
 // )
 //
 // // Titled progress bar with percentage
@@ -39,6 +53,9 @@ export 'src/titled_progress_bar.dart';
 
 // Export UI components
 export 'ui/dots_indicator.dart';
+export 'ui/circular_percent_indicator.dart';
+export 'ui/gauge_indicator.dart';
 
 // Export utilities
 export 'utils/dots_decorator.dart';
+export 'utils/gauge_decorator.dart';
