@@ -1,0 +1,38 @@
+# System files
+.DS_Store
+*.swp
+*.swo
+*~
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+*.code-workspace
+.cursor/
+
+# Dart tool files (should not be published)
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+
+# Build artifacts
+build/
+**/build/
+
+# Coverage
+coverage/
+*.lcov
+
+# Local configuration
+local.properties
+**/local.properties
+
+# Logs
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
+
