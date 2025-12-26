@@ -461,4 +461,394 @@ void main() {
       expect(LinearProgressBar.progressTypeDots, 2);
     });
   });
+
+  group('CircularPercentIndicator', () {
+    group('constructor', () {
+      test('should use default values', () {
+        const indicator = CircularPercentIndicator();
+        expect(indicator.percent, 0.0);
+        expect(indicator.radius, 50.0);
+        expect(indicator.lineWidth, 5.0);
+        expect(indicator.progressColor, Colors.blue);
+        expect(indicator.circularStrokeCap, CircularStrokeCap.round);
+        expect(indicator.startAngle, CircularStartAngle.top);
+        expect(indicator.reverse, false);
+        expect(indicator.animation, false);
+      });
+
+      test('should accept custom values', () {
+        const indicator = CircularPercentIndicator(
+          percent: 0.75,
+          radius: 80,
+          lineWidth: 10,
+          progressColor: Colors.green,
+          backgroundColor: Colors.grey,
+          circularStrokeCap: CircularStrokeCap.square,
+          startAngle: CircularStartAngle.right,
+          reverse: true,
+          animation: true,
+        );
+        expect(indicator.percent, 0.75);
+        expect(indicator.radius, 80);
+        expect(indicator.lineWidth, 10);
+        expect(indicator.progressColor, Colors.green);
+        expect(indicator.backgroundColor, Colors.grey);
+        expect(indicator.circularStrokeCap, CircularStrokeCap.square);
+        expect(indicator.startAngle, CircularStartAngle.right);
+        expect(indicator.reverse, true);
+        expect(indicator.animation, true);
+      });
+    });
+
+    group('widget rendering', () {
+      testWidgets('should render circular indicator', (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: CircularPercentIndicator(
+                percent: 0.5,
+                radius: 50,
+              ),
+            ),
+          ),
+        );
+
+        expect(find.byType(CircularPercentIndicator), findsOneWidget);
+        expect(find.byType(CustomPaint), findsOneWidget);
+      });
+
+      testWidgets('should render with center widget', (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: CircularPercentIndicator(
+                percent: 0.75,
+                center: Text('75%'),
+              ),
+            ),
+          ),
+        );
+
+        expect(find.text('75%'), findsOneWidget);
+      });
+
+      testWidgets('should render with header and footer', (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: CircularPercentIndicator(
+                percent: 0.5,
+                header: Text('Header'),
+                footer: Text('Footer'),
+              ),
+            ),
+          ),
+        );
+
+        expect(find.text('Header'), findsOneWidget);
+        expect(find.text('Footer'), findsOneWidget);
+      });
+
+      testWidgets('should render with gradient', (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: CircularPercentIndicator(
+                percent: 0.5,
+                linearGradient: LinearGradient(
+                  colors: [Colors.blue, Colors.purple],
+                ),
+              ),
+            ),
+          ),
+        );
+
+        expect(find.byType(CircularPercentIndicator), findsOneWidget);
+      });
+    });
+  });
+
+  group('GaugeIndicator', () {
+    group('constructor', () {
+      test('should use default values', () {
+        const gauge = GaugeIndicator();
+        expect(gauge.value, 0.0);
+        expect(gauge.size, 200.0);
+        expect(gauge.strokeWidth, 15.0);
+        expect(gauge.valueColor, Colors.blue);
+        expect(gauge.startAngle, 135.0);
+        expect(gauge.sweepAngle, 270.0);
+        expect(gauge.showValue, true);
+        expect(gauge.gaugeStyle, GaugeStyle.simple);
+        expect(gauge.showNeedle, false);
+        expect(gauge.animation, false);
+      });
+
+      test('should accept custom values', () {
+        const gauge = GaugeIndicator(
+          value: 0.65,
+          size: 250,
+          strokeWidth: 20,
+          valueColor: Colors.red,
+          startAngle: 180,
+          sweepAngle: 180,
+          showValue: false,
+          gaugeStyle: GaugeStyle.ticked,
+          showNeedle: true,
+          animation: true,
+        );
+        expect(gauge.value, 0.65);
+        expect(gauge.size, 250);
+        expect(gauge.strokeWidth, 20);
+        expect(gauge.valueColor, Colors.red);
+        expect(gauge.startAngle, 180);
+        expect(gauge.sweepAngle, 180);
+        expect(gauge.showValue, false);
+        expect(gauge.gaugeStyle, GaugeStyle.ticked);
+        expect(gauge.showNeedle, true);
+        expect(gauge.animation, true);
+      });
+    });
+
+    group('widget rendering', () {
+      testWidgets('should render gauge indicator', (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: GaugeIndicator(
+                value: 0.5,
+                size: 200,
+              ),
+            ),
+          ),
+        );
+
+        expect(find.byType(GaugeIndicator), findsOneWidget);
+        expect(find.byType(CustomPaint), findsOneWidget);
+      });
+
+      testWidgets('should render with value label', (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: GaugeIndicator(
+                value: 0.5,
+                showValue: true,
+                labelPosition: GaugeLabelPosition.center,
+              ),
+            ),
+          ),
+        );
+
+        expect(find.text('50%'), findsOneWidget);
+      });
+
+      testWidgets('should render with custom formatter', (tester) async {
+        await tester.pumpWidget(
+          MaterialApp(
+            home: Scaffold(
+              body: GaugeIndicator(
+                value: 0.75,
+                showValue: true,
+                valueFormatter: (v) => '${(v * 100).toInt()}°C',
+              ),
+            ),
+          ),
+        );
+
+        expect(find.text('75°C'), findsOneWidget);
+      });
+
+      testWidgets('should render with title and subtitle', (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: GaugeIndicator(
+                value: 0.5,
+                title: Text('Title'),
+                subtitle: Text('Subtitle'),
+              ),
+            ),
+          ),
+        );
+
+        expect(find.text('Title'), findsOneWidget);
+        expect(find.text('Subtitle'), findsOneWidget);
+      });
+
+      testWidgets('should render with min/max labels', (tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: GaugeIndicator(
+                value: 0.5,
+                showMinMax: true,
+                minLabel: 'Min',
+                maxLabel: 'Max',
+              ),
+            ),
+          ),
+        );
+
+        expect(find.text('Min'), findsOneWidget);
+        expect(find.text('Max'), findsOneWidget);
+      });
+    });
+  });
+
+  group('GaugeStyle enum', () {
+    test('should have all gauge style values', () {
+      expect(GaugeStyle.values, contains(GaugeStyle.simple));
+      expect(GaugeStyle.values, contains(GaugeStyle.ticked));
+      expect(GaugeStyle.values, contains(GaugeStyle.segmented));
+      expect(GaugeStyle.values, contains(GaugeStyle.modern));
+      expect(GaugeStyle.values.length, 4);
+    });
+  });
+
+  group('GaugeLabelPosition enum', () {
+    test('should have all label position values', () {
+      expect(GaugeLabelPosition.values, contains(GaugeLabelPosition.center));
+      expect(GaugeLabelPosition.values, contains(GaugeLabelPosition.bottom));
+      expect(GaugeLabelPosition.values, contains(GaugeLabelPosition.none));
+      expect(GaugeLabelPosition.values.length, 3);
+    });
+  });
+
+  group('CircularStrokeCap enum', () {
+    test('should have all stroke cap values', () {
+      expect(CircularStrokeCap.values, contains(CircularStrokeCap.round));
+      expect(CircularStrokeCap.values, contains(CircularStrokeCap.square));
+      expect(CircularStrokeCap.values, contains(CircularStrokeCap.butt));
+      expect(CircularStrokeCap.values.length, 3);
+    });
+  });
+
+  group('CircularStartAngle enum', () {
+    test('should have all start angle values', () {
+      expect(CircularStartAngle.values, contains(CircularStartAngle.top));
+      expect(CircularStartAngle.values, contains(CircularStartAngle.right));
+      expect(CircularStartAngle.values, contains(CircularStartAngle.bottom));
+      expect(CircularStartAngle.values, contains(CircularStartAngle.left));
+      expect(CircularStartAngle.values.length, 4);
+    });
+  });
+
+  group('GaugeRange', () {
+    test('should create gauge range', () {
+      const range = GaugeRange(
+        start: 0.0,
+        end: 0.5,
+        color: Colors.green,
+        label: 'Good',
+      );
+      expect(range.start, 0.0);
+      expect(range.end, 0.5);
+      expect(range.color, Colors.green);
+      expect(range.label, 'Good');
+    });
+  });
+
+  group('GaugeSegment', () {
+    test('should create gauge segment', () {
+      const segment = GaugeSegment(
+        start: 0.0,
+        end: 0.33,
+        color: Colors.red,
+      );
+      expect(segment.start, 0.0);
+      expect(segment.end, 0.33);
+      expect(segment.color, Colors.red);
+    });
+  });
+
+  group('GaugeDecorator', () {
+    test('should create default decorator', () {
+      const decorator = GaugeDecorator();
+      expect(decorator.valueColor, isNull);
+      expect(decorator.backgroundColor, isNull);
+      expect(decorator.gradient, isNull);
+    });
+
+    test('should create speedometer decorator', () {
+      final decorator = GaugeDecorator.speedometer();
+      expect(decorator.startAngle, 135);
+      expect(decorator.sweepAngle, 270);
+      expect(decorator.gaugeStyle, GaugeStyle.ticked);
+      expect(decorator.showNeedle, true);
+      expect(decorator.ranges, isNotNull);
+      expect(decorator.ranges!.length, 3);
+    });
+
+    test('should create minimal decorator', () {
+      final decorator = GaugeDecorator.minimal();
+      expect(decorator.startAngle, 180);
+      expect(decorator.sweepAngle, 180);
+      expect(decorator.gaugeStyle, GaugeStyle.simple);
+      expect(decorator.showNeedle, false);
+    });
+
+    test('should create gradient decorator', () {
+      final decorator = GaugeDecorator.gradient();
+      expect(decorator.gaugeStyle, GaugeStyle.modern);
+      expect(decorator.gradient, isNotNull);
+    });
+
+    test('copyWith should create new instance with updated values', () {
+      const original = GaugeDecorator(
+        valueColor: Colors.blue,
+        startAngle: 135,
+      );
+      final updated = original.copyWith(valueColor: Colors.red);
+      expect(original.valueColor, Colors.blue);
+      expect(updated.valueColor, Colors.red);
+      expect(updated.startAngle, 135);
+    });
+  });
+
+  group('CircularDecorator', () {
+    test('should create default decorator', () {
+      const decorator = CircularDecorator();
+      expect(decorator.progressColor, isNull);
+      expect(decorator.backgroundColor, isNull);
+      expect(decorator.gradient, isNull);
+    });
+
+    test('should create gradient decorator', () {
+      final decorator = CircularDecorator.gradient();
+      expect(decorator.lineWidth, 10);
+      expect(decorator.animation, true);
+      expect(decorator.gradient, isNotNull);
+    });
+
+    test('should create minimal decorator', () {
+      final decorator = CircularDecorator.minimal();
+      expect(decorator.progressColor, Colors.blue);
+      expect(decorator.lineWidth, 8);
+      expect(decorator.animation, true);
+    });
+
+    test('should create thick decorator', () {
+      final decorator = CircularDecorator.thick();
+      expect(decorator.lineWidth, 20);
+      expect(decorator.animation, true);
+    });
+
+    test('should create thin decorator', () {
+      final decorator = CircularDecorator.thin();
+      expect(decorator.lineWidth, 4);
+      expect(decorator.animation, true);
+    });
+
+    test('copyWith should create new instance with updated values', () {
+      const original = CircularDecorator(
+        progressColor: Colors.blue,
+        lineWidth: 10,
+      );
+      final updated = original.copyWith(progressColor: Colors.green);
+      expect(original.progressColor, Colors.blue);
+      expect(updated.progressColor, Colors.green);
+      expect(updated.lineWidth, 10);
+    });
+  });
 }
