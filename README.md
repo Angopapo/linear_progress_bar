@@ -849,6 +849,12 @@ cd example
 flutter run
 ```
 
+### Download APK
+
+You can download and test the example app directly on your Android device:
+
+📱 [Download APK](https://bit.ly/linear_progress_bar)
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
