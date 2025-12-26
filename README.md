@@ -763,7 +763,36 @@ CircularPercentIndicator(
 )
 ```
 
-## Migration from v2.x
+## Migration Guides
+
+### Migration from v1.x
+
+If you're upgrading from version 1.x:
+
+#### Breaking Changes
+
+1. **ProgressType Enum**: Replace integer constants with enum values:
+
+```dart
+// Old (deprecated)
+progressType: LinearProgressBar.progressTypeLinear
+
+// New
+progressType: ProgressType.linear
+```
+
+2. **TitledProgressBar**: Now uses `const` constructor and has additional features.
+
+#### New Features in v2.0
+
+- `animateProgress` - Enable smooth progress animations
+- `progressGradient` - Apply gradients to progress bars
+- `LabelType.percentage` and `LabelType.stepCount` for TitledProgressBar
+- `LabelPosition` for flexible label placement
+- `onDotTap` callback for interactive dots
+- Improved null safety and assertions
+
+### Migration from v2.x
 
 If you're upgrading from version 2.x:
 
