@@ -28,6 +28,18 @@ enum CircularStartAngle {
   left,
 }
 
+/// The position of the child widget relative to the circular indicator.
+enum CircularChildPosition {
+  /// Child positioned at the top of the indicator.
+  top,
+
+  /// Child positioned at the bottom of the indicator.
+  bottom,
+
+  /// Child positioned at the center of the indicator.
+  center,
+}
+
 /// A beautiful and customizable circular percent indicator widget.
 ///
 /// This widget displays progress in a circular format with extensive
@@ -123,6 +135,27 @@ class CircularPercentIndicator extends StatefulWidget {
   /// Whether to animate from last percent or from 0.
   final bool animateFromLastPercent;
 
+  /// The position of the center child widget.
+  final CircularChildPosition centerPosition;
+
+  /// Widget to display above the center widget (inside the circle).
+  final Widget? centerTop;
+
+  /// Widget to display below the center widget (inside the circle).
+  final Widget? centerBottom;
+
+  /// Spacing between center widgets.
+  final double centerSpacing;
+
+  /// Whether to show the percentage text automatically.
+  final bool showPercentage;
+
+  /// The text style for the percentage display.
+  final TextStyle? percentageStyle;
+
+  /// Custom percentage formatter.
+  final String Function(double percent)? percentageFormatter;
+
   /// Creates a circular percent indicator widget.
   const CircularPercentIndicator({
     super.key,
@@ -151,6 +184,13 @@ class CircularPercentIndicator extends StatefulWidget {
     this.arcType,
     this.arcBackgroundColor,
     this.animateFromLastPercent = false,
+    this.centerPosition = CircularChildPosition.center,
+    this.centerTop,
+    this.centerBottom,
+    this.centerSpacing = 4.0,
+    this.showPercentage = false,
+    this.percentageStyle,
+    this.percentageFormatter,
   }) : assert(percent >= 0.0 && percent <= 1.0, 'Percent must be between 0.0 and 1.0');
 
   @override
@@ -232,6 +272,95 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
     super.dispose();
   }
 
+  String _formatPercentage(double percent) {
+    if (widget.percentageFormatter != null) {
+      return widget.percentageFormatter!(percent);
+    }
+    return '${(percent * 100).toInt()}%';
+  }
+
+  Widget? _buildCenterContent(double animatedPercent) {
+    final List<Widget> centerChildren = [];
+
+    // Add top widget
+    if (widget.centerTop != null) {
+      centerChildren.add(widget.centerTop!);
+    }
+
+    // Add percentage if enabled (positioned at top)
+    if (widget.showPercentage && widget.centerPosition == CircularChildPosition.top) {
+      centerChildren.add(Text(
+        _formatPercentage(animatedPercent),
+        style: widget.percentageStyle ??
+            TextStyle(
+              fontSize: widget.radius * 0.3,
+              fontWeight: FontWeight.bold,
+              color: widget.progressColor,
+            ),
+      ));
+    }
+
+    // Add main center widget
+    if (widget.center != null) {
+      centerChildren.add(widget.center!);
+    }
+
+    // Add percentage if enabled (positioned at center or default)
+    if (widget.showPercentage && widget.centerPosition == CircularChildPosition.center && widget.center == null) {
+      centerChildren.add(Text(
+        _formatPercentage(animatedPercent),
+        style: widget.percentageStyle ??
+            TextStyle(
+              fontSize: widget.radius * 0.3,
+              fontWeight: FontWeight.bold,
+              color: widget.progressColor,
+            ),
+      ));
+    }
+
+    // Add bottom widget
+    if (widget.centerBottom != null) {
+      centerChildren.add(widget.centerBottom!);
+    }
+
+    // Add percentage if enabled (positioned at bottom)
+    if (widget.showPercentage && widget.centerPosition == CircularChildPosition.bottom) {
+      centerChildren.add(Text(
+        _formatPercentage(animatedPercent),
+        style: widget.percentageStyle ??
+            TextStyle(
+              fontSize: widget.radius * 0.3,
+              fontWeight: FontWeight.bold,
+              color: widget.progressColor,
+            ),
+      ));
+    }
+
+    if (centerChildren.isEmpty) {
+      return null;
+    }
+
+    if (centerChildren.length == 1) {
+      return Center(child: centerChildren.first);
+    }
+
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: centerChildren.map((child) {
+          final index = centerChildren.indexOf(child);
+          if (index > 0) {
+            return Padding(
+              padding: EdgeInsets.only(top: widget.centerSpacing),
+              child: child,
+            );
+          }
+          return child;
+        }).toList(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = widget.radius * 2;
@@ -267,9 +396,7 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
                   arcType: widget.arcType,
                   arcBackgroundColor: widget.arcBackgroundColor,
                 ),
-                child: widget.center != null
-                    ? Center(child: widget.center)
-                    : null,
+                child: _buildCenterContent(_animation.value),
               ),
             );
           },
@@ -279,6 +406,120 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
           widget.footer!,
         ],
       ],
+    );
+  }
+}
+
+/// A simple circular progress widget with percentage display.
+///
+/// This is a convenience widget that combines [CircularPercentIndicator]
+/// with common configurations for displaying a simple progress circle.
+class SimpleCircularProgress extends StatelessWidget {
+  /// The progress value between 0.0 and 1.0.
+  final double percent;
+
+  /// The radius of the circle.
+  final double radius;
+
+  /// The width of the progress line.
+  final double lineWidth;
+
+  /// The color of the progress.
+  final Color progressColor;
+
+  /// The background color.
+  final Color backgroundColor;
+
+  /// Whether to animate progress changes.
+  final bool animation;
+
+  /// Whether to show the percentage text.
+  final bool showPercentage;
+
+  /// The text style for the percentage.
+  final TextStyle? percentageStyle;
+
+  /// Creates a simple circular progress widget.
+  const SimpleCircularProgress({
+    super.key,
+    this.percent = 0.0,
+    this.radius = 50.0,
+    this.lineWidth = 8.0,
+    this.progressColor = Colors.blue,
+    this.backgroundColor = const Color(0xFFE0E0E0),
+    this.animation = true,
+    this.showPercentage = true,
+    this.percentageStyle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CircularPercentIndicator(
+      percent: percent,
+      radius: radius,
+      lineWidth: lineWidth,
+      progressColor: progressColor,
+      backgroundColor: backgroundColor,
+      animation: animation,
+      circularStrokeCap: CircularStrokeCap.round,
+      showPercentage: showPercentage,
+      percentageStyle: percentageStyle,
+    );
+  }
+}
+
+/// A gradient circular progress indicator.
+///
+/// This is a convenience widget that provides a gradient progress circle.
+class GradientCircularProgress extends StatelessWidget {
+  /// The progress value between 0.0 and 1.0.
+  final double percent;
+
+  /// The radius of the circle.
+  final double radius;
+
+  /// The width of the progress line.
+  final double lineWidth;
+
+  /// The gradient colors.
+  final List<Color> gradientColors;
+
+  /// The background color.
+  final Color backgroundColor;
+
+  /// Whether to animate progress changes.
+  final bool animation;
+
+  /// Widget to display in the center.
+  final Widget? center;
+
+  /// Creates a gradient circular progress widget.
+  const GradientCircularProgress({
+    super.key,
+    this.percent = 0.0,
+    this.radius = 50.0,
+    this.lineWidth = 10.0,
+    this.gradientColors = const [Colors.blue, Colors.purple],
+    this.backgroundColor = const Color(0xFFE0E0E0),
+    this.animation = true,
+    this.center,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CircularPercentIndicator(
+      percent: percent,
+      radius: radius,
+      lineWidth: lineWidth,
+      backgroundColor: backgroundColor,
+      animation: animation,
+      circularStrokeCap: CircularStrokeCap.round,
+      linearGradient: LinearGradient(
+        colors: gradientColors,
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
+      center: center,
     );
   }
 }
