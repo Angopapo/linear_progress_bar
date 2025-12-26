@@ -28,6 +28,18 @@ enum CircularStartAngle {
   left,
 }
 
+/// The position of the child widget in a circular percent indicator.
+enum CircularChildPosition {
+  /// Child positioned at the top of the circle.
+  top,
+
+  /// Child positioned at the bottom of the circle.
+  bottom,
+
+  /// Child positioned at the center of the circle.
+  center,
+}
+
 /// A beautiful and customizable circular percent indicator widget.
 ///
 /// This widget displays progress in a circular format with extensive
@@ -123,6 +135,21 @@ class CircularPercentIndicator extends StatefulWidget {
   /// Whether to animate from last percent or from 0.
   final bool animateFromLastPercent;
 
+  /// Child widget to display.
+  final Widget? child;
+
+  /// Position of the child widget.
+  final CircularChildPosition childPosition;
+
+  /// Spacing between child and the circle.
+  final double childSpacing;
+
+  /// Whether the widget can be interacted with (draggable).
+  final bool interactive;
+
+  /// Callback when value changes during interaction.
+  final ValueChanged<double>? onValueChanged;
+
   /// Creates a circular percent indicator widget.
   const CircularPercentIndicator({
     super.key,
@@ -151,6 +178,11 @@ class CircularPercentIndicator extends StatefulWidget {
     this.arcType,
     this.arcBackgroundColor,
     this.animateFromLastPercent = false,
+    this.child,
+    this.childPosition = CircularChildPosition.center,
+    this.childSpacing = 8.0,
+    this.interactive = false,
+    this.onValueChanged,
   }) : assert(percent >= 0.0 && percent <= 1.0, 'Percent must be between 0.0 and 1.0');
 
   @override
@@ -162,10 +194,13 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
   late AnimationController _animationController;
   late Animation<double> _animation;
   double _previousPercent = 0.0;
+  double _interactivePercent = 0.0;
+  bool _isDragging = false;
 
   @override
   void initState() {
     super.initState();
+    _interactivePercent = widget.percent;
     _animationController = AnimationController(
       vsync: this,
       duration: widget.animationDuration,
@@ -196,7 +231,8 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
   @override
   void didUpdateWidget(CircularPercentIndicator oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.percent != widget.percent) {
+    if (oldWidget.percent != widget.percent && !_isDragging) {
+      _interactivePercent = widget.percent;
       if (widget.animation) {
         if (widget.restartAnimation) {
           _animationController.reset();
@@ -232,9 +268,121 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
     super.dispose();
   }
 
+  double get _currentPercent {
+    if (_isDragging) return _interactivePercent;
+    if (widget.animation) return _animation.value;
+    return widget.percent;
+  }
+
+  void _handlePanUpdate(DragUpdateDetails details, Size size) {
+    if (!widget.interactive) return;
+    _isDragging = true;
+    
+    final center = Offset(size.width / 2, size.height / 2);
+    final position = details.localPosition;
+    var angle = math.atan2(position.dy - center.dy, position.dx - center.dx);
+    
+    // Convert angle based on start angle
+    double startRad;
+    switch (widget.startAngle) {
+      case CircularStartAngle.top:
+        startRad = -math.pi / 2;
+        break;
+      case CircularStartAngle.right:
+        startRad = 0;
+        break;
+      case CircularStartAngle.bottom:
+        startRad = math.pi / 2;
+        break;
+      case CircularStartAngle.left:
+        startRad = math.pi;
+        break;
+    }
+    
+    var normalizedAngle = angle - startRad;
+    if (normalizedAngle < 0) normalizedAngle += 2 * math.pi;
+    
+    var newPercent = normalizedAngle / (2 * math.pi);
+    if (widget.reverse) newPercent = 1.0 - newPercent;
+    newPercent = newPercent.clamp(0.0, 1.0);
+    
+    setState(() {
+      _interactivePercent = newPercent;
+    });
+    
+    widget.onValueChanged?.call(_interactivePercent);
+  }
+
+  void _handlePanEnd(DragEndDetails details) {
+    _isDragging = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = widget.radius * 2;
+
+    Widget circleWidget = AnimatedBuilder(
+      animation: _animation,
+      builder: (context, child) {
+        return GestureDetector(
+          onPanUpdate: (details) => _handlePanUpdate(details, Size(size, size)),
+          onPanEnd: _handlePanEnd,
+          child: SizedBox(
+            width: size,
+            height: size,
+            child: CustomPaint(
+              painter: _CircularProgressPainter(
+                percent: _currentPercent,
+                lineWidth: widget.lineWidth,
+                backgroundWidth: widget.backgroundWidth ?? widget.lineWidth,
+                progressColor: widget.progressColor,
+                backgroundColor: widget.backgroundColor,
+                linearGradient: widget.linearGradient,
+                backgroundGradient: widget.backgroundGradient,
+                circularStrokeCap: widget.circularStrokeCap,
+                startAngle: widget.startAngle,
+                reverse: widget.reverse,
+                fillColor: widget.fillColor,
+                circleColor: widget.circleColor,
+                rotateLinearGradient: widget.rotateLinearGradient,
+                arcType: widget.arcType,
+                arcBackgroundColor: widget.arcBackgroundColor,
+              ),
+              child: _buildCenterContent(),
+            ),
+          ),
+        );
+      },
+    );
+
+    // Handle child positioning
+    if (widget.child != null && widget.childPosition != CircularChildPosition.center) {
+      switch (widget.childPosition) {
+        case CircularChildPosition.top:
+          circleWidget = Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              widget.child!,
+              SizedBox(height: widget.childSpacing),
+              circleWidget,
+            ],
+          );
+          break;
+        case CircularChildPosition.bottom:
+          circleWidget = Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              circleWidget,
+              SizedBox(height: widget.childSpacing),
+              widget.child!,
+            ],
+          );
+          break;
+        case CircularChildPosition.center:
+          // Handled in _buildCenterContent
+          break;
+      }
+    }
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -243,43 +391,25 @@ class _CircularPercentIndicatorState extends State<CircularPercentIndicator>
           widget.header!,
           const SizedBox(height: 8),
         ],
-        AnimatedBuilder(
-          animation: _animation,
-          builder: (context, child) {
-            return SizedBox(
-              width: size,
-              height: size,
-              child: CustomPaint(
-                painter: _CircularProgressPainter(
-                  percent: _animation.value,
-                  lineWidth: widget.lineWidth,
-                  backgroundWidth: widget.backgroundWidth ?? widget.lineWidth,
-                  progressColor: widget.progressColor,
-                  backgroundColor: widget.backgroundColor,
-                  linearGradient: widget.linearGradient,
-                  backgroundGradient: widget.backgroundGradient,
-                  circularStrokeCap: widget.circularStrokeCap,
-                  startAngle: widget.startAngle,
-                  reverse: widget.reverse,
-                  fillColor: widget.fillColor,
-                  circleColor: widget.circleColor,
-                  rotateLinearGradient: widget.rotateLinearGradient,
-                  arcType: widget.arcType,
-                  arcBackgroundColor: widget.arcBackgroundColor,
-                ),
-                child: widget.center != null
-                    ? Center(child: widget.center)
-                    : null,
-              ),
-            );
-          },
-        ),
+        circleWidget,
         if (widget.footer != null) ...[
           const SizedBox(height: 8),
           widget.footer!,
         ],
       ],
     );
+  }
+
+  Widget? _buildCenterContent() {
+    final centerContent = widget.center ?? 
+        (widget.child != null && widget.childPosition == CircularChildPosition.center
+            ? widget.child
+            : null);
+    
+    if (centerContent != null) {
+      return Center(child: centerContent);
+    }
+    return null;
   }
 }
 

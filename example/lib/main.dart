@@ -41,8 +41,23 @@ class _ExamplesPageState extends State<ExamplesPage> {
     DotsProgressExamples(),
     TitledProgressExamples(),
     CircularPercentExamples(),
+    LinearPercentExamples(),
     GaugeExamples(),
+    LinearGaugeExamples(),
+    RadialGaugeExamples(),
     AnimatedProgressExamples(),
+  ];
+
+  final List<String> _titles = const [
+    'Linear Bar',
+    'Dots',
+    'Titled',
+    'Circular',
+    'Linear %',
+    'Gauge',
+    'Linear Gauge',
+    'Radial Gauge',
+    'Animated',
   ];
 
   @override
@@ -53,39 +68,59 @@ class _ExamplesPageState extends State<ExamplesPage> {
         title: const Text('Progress Indicators Demo'),
       ),
       body: _pages[_selectedIndex],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) {
-          setState(() => _selectedIndex = index);
-        },
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.linear_scale),
-            label: 'Linear',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.more_horiz),
-            label: 'Dots',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.title),
-            label: 'Titled',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.circle_outlined),
-            label: 'Circular',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.speed),
-            label: 'Gauge',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.animation),
-            label: 'Animated',
-          ),
-        ],
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    'Progress Indicators',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text('Demo of all widgets'),
+                ],
+              ),
+            ),
+            for (int i = 0; i < _titles.length; i++)
+              ListTile(
+                leading: Icon(_getIcon(i)),
+                title: Text(_titles[i]),
+                selected: _selectedIndex == i,
+                onTap: () {
+                  setState(() => _selectedIndex = i);
+                  Navigator.pop(context);
+                },
+              ),
+          ],
+        ),
       ),
     );
+  }
+
+  IconData _getIcon(int index) {
+    const icons = [
+      Icons.linear_scale,
+      Icons.more_horiz,
+      Icons.title,
+      Icons.circle_outlined,
+      Icons.percent,
+      Icons.speed,
+      Icons.straighten,
+      Icons.radio_button_checked,
+      Icons.animation,
+    ];
+    return icons[index];
   }
 }
 
@@ -1171,6 +1206,871 @@ class _GaugeExamplesState extends State<GaugeExamples> {
                   ],
                 ),
               ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+          _buildSlider(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSlider() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(
+              'Adjust Value: ${(_value * 100).toInt()}%',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Slider(
+              value: _value,
+              min: 0,
+              max: 1,
+              divisions: 100,
+              onChanged: (value) {
+                setState(() => _value = value);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+    );
+  }
+
+  Widget _buildExampleCard(String title, Widget child) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(height: 12),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Examples of linear percent indicators
+class LinearPercentExamples extends StatefulWidget {
+  /// Creates the linear percent examples widget.
+  const LinearPercentExamples({super.key});
+
+  @override
+  State<LinearPercentExamples> createState() => _LinearPercentExamplesState();
+}
+
+class _LinearPercentExamplesState extends State<LinearPercentExamples> {
+  double _percent = 0.65;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('Basic Linear Percent'),
+          _buildExampleCard(
+            'Simple Progress with Percentage',
+            LinearPercentIndicator(
+              percent: _percent,
+              lineHeight: 20,
+              progressColor: Colors.blue,
+              backgroundColor: Colors.grey.shade300,
+              center: Text(
+                '${(_percent * 100).toInt()}%',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              animation: true,
+            ),
+          ),
+
+          _buildSectionTitle('Gradient Linear'),
+          _buildExampleCard(
+            'With Gradient Colors',
+            LinearPercentIndicator(
+              percent: _percent,
+              lineHeight: 24,
+              linearGradient: const LinearGradient(
+                colors: [Colors.blue, Colors.purple, Colors.pink],
+              ),
+              backgroundColor: Colors.grey.shade200,
+              animation: true,
+              center: Text(
+                '${(_percent * 100).toInt()}%',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('Child Positioning'),
+          _buildExampleCard(
+            'Child on Left',
+            LinearPercentIndicator(
+              percent: _percent,
+              lineHeight: 16,
+              progressColor: Colors.green,
+              backgroundColor: Colors.grey.shade300,
+              animation: true,
+              child: Text(
+                '${(_percent * 100).toInt()}%',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              childPosition: LinearChildPosition.left,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildExampleCard(
+            'Child on Right',
+            LinearPercentIndicator(
+              percent: _percent,
+              lineHeight: 16,
+              progressColor: Colors.orange,
+              backgroundColor: Colors.grey.shade300,
+              animation: true,
+              child: Text(
+                '${(_percent * 100).toInt()}%',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              childPosition: LinearChildPosition.right,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildExampleCard(
+            'Child at Center',
+            LinearPercentIndicator(
+              percent: _percent,
+              lineHeight: 24,
+              progressColor: Colors.purple,
+              backgroundColor: Colors.grey.shade300,
+              animation: true,
+              child: Text(
+                '${(_percent * 100).toInt()}%',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              childPosition: LinearChildPosition.center,
+            ),
+          ),
+
+          _buildSectionTitle('Leading & Trailing'),
+          _buildExampleCard(
+            'With Icons',
+            LinearPercentIndicator(
+              percent: _percent,
+              lineHeight: 16,
+              progressColor: Colors.teal,
+              backgroundColor: Colors.grey.shade300,
+              animation: true,
+              leading: const Icon(Icons.download, color: Colors.teal),
+              trailing: Text(
+                '${(_percent * 100).toInt()}%',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('Multi-Segment Indicator'),
+          _buildExampleCard(
+            'Multiple Segments',
+            MultiSegmentLinearIndicator(
+              segments: const [
+                LinearSegment(value: 0.30, color: Colors.red, label: 'Critical'),
+                LinearSegment(value: 0.25, color: Colors.orange, label: 'Warning'),
+                LinearSegment(value: 0.45, color: Colors.green, label: 'Good'),
+              ],
+              height: 20,
+              animation: true,
+              showLabels: true,
+              showDividers: true,
+              dividerColor: Colors.white,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildExampleCard(
+            'Gradient Segments',
+            MultiSegmentLinearIndicator(
+              segments: [
+                LinearSegment(
+                  value: 0.4,
+                  color: Colors.blue,
+                  gradient: const LinearGradient(
+                    colors: [Colors.blue, Colors.cyan],
+                  ),
+                  label: 'Complete',
+                ),
+                LinearSegment(
+                  value: 0.3,
+                  color: Colors.orange,
+                  gradient: const LinearGradient(
+                    colors: [Colors.orange, Colors.yellow],
+                  ),
+                  label: 'In Progress',
+                ),
+                const LinearSegment(
+                  value: 0.3,
+                  color: Colors.grey,
+                  label: 'Remaining',
+                ),
+              ],
+              height: 24,
+              animation: true,
+              showLabels: true,
+            ),
+          ),
+
+          _buildSectionTitle('RTL Support'),
+          _buildExampleCard(
+            'Right-to-Left Direction',
+            LinearPercentIndicator(
+              percent: _percent,
+              lineHeight: 16,
+              progressColor: Colors.indigo,
+              backgroundColor: Colors.grey.shade300,
+              animation: true,
+              isRTL: true,
+              trailing: Text('${(_percent * 100).toInt()}%'),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+          _buildSlider(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSlider() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(
+              'Adjust Progress: ${(_percent * 100).toInt()}%',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Slider(
+              value: _percent,
+              min: 0,
+              max: 1,
+              divisions: 100,
+              onChanged: (value) {
+                setState(() => _percent = value);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+    );
+  }
+
+  Widget _buildExampleCard(String title, Widget child) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(height: 12),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Examples of linear gauge indicators
+class LinearGaugeExamples extends StatefulWidget {
+  /// Creates the linear gauge examples widget.
+  const LinearGaugeExamples({super.key});
+
+  @override
+  State<LinearGaugeExamples> createState() => _LinearGaugeExamplesState();
+}
+
+class _LinearGaugeExamplesState extends State<LinearGaugeExamples> {
+  double _value = 0.65;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('Basic Linear Gauge'),
+          _buildExampleCard(
+            'Simple Linear Gauge',
+            Center(
+              child: SizedBox(
+                width: double.infinity,
+                height: 80,
+                child: LinearGaugeIndicator(
+                  value: _value,
+                  thickness: 20,
+                  backgroundColor: Colors.grey.shade300,
+                  valueBar: const LinearValueBar(
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('With Ruler Style'),
+          _buildExampleCard(
+            'Ticks with Labels',
+            Center(
+              child: SizedBox(
+                width: double.infinity,
+                height: 100,
+                child: LinearGaugeIndicator(
+                  value: _value,
+                  thickness: 16,
+                  backgroundColor: Colors.grey.shade200,
+                  rulerStyle: RulerStyle.ticksWithLabels,
+                  majorDivisions: 10,
+                  minorDivisionsPerMajor: 2,
+                  valueBar: LinearValueBar(
+                    gradient: LinearGradient(
+                      colors: [Colors.green, Colors.yellow, Colors.red],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('With Pointer'),
+          _buildExampleCard(
+            'Triangle Pointer',
+            Center(
+              child: SizedBox(
+                width: double.infinity,
+                height: 80,
+                child: LinearGaugeIndicator(
+                  value: _value,
+                  thickness: 16,
+                  backgroundColor: Colors.grey.shade300,
+                  pointer: const LinearGaugePointer(
+                    type: LinearPointerType.triangle,
+                    color: Colors.red,
+                    size: Size(20, 15),
+                    position: PointerPosition.start,
+                    hasShadow: true,
+                  ),
+                  valueBar: const LinearValueBar(
+                    color: Colors.blue,
+                  ),
+                  animation: true,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildExampleCard(
+            'Diamond Pointer on Both Sides',
+            Center(
+              child: SizedBox(
+                width: double.infinity,
+                height: 100,
+                child: LinearGaugeIndicator(
+                  value: _value,
+                  thickness: 16,
+                  backgroundColor: Colors.grey.shade300,
+                  pointer: const LinearGaugePointer(
+                    type: LinearPointerType.diamond,
+                    color: Colors.purple,
+                    size: Size(16, 16),
+                    position: PointerPosition.both,
+                    hasShadow: true,
+                  ),
+                  valueBar: const LinearValueBar(
+                    color: Colors.purple,
+                  ),
+                  animation: true,
+                ),
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('Range Linear Gauge'),
+          _buildExampleCard(
+            'With Colored Ranges',
+            Center(
+              child: SizedBox(
+                width: double.infinity,
+                height: 100,
+                child: LinearGaugeIndicator(
+                  value: _value,
+                  thickness: 20,
+                  backgroundColor: Colors.transparent,
+                  ranges: const [
+                    LinearGaugeRange(start: 0.0, end: 0.33, color: Colors.green),
+                    LinearGaugeRange(start: 0.33, end: 0.66, color: Colors.orange),
+                    LinearGaugeRange(start: 0.66, end: 1.0, color: Colors.red),
+                  ],
+                  rangesInsideTrack: true,
+                  pointer: const LinearGaugePointer(
+                    type: LinearPointerType.invertedTriangle,
+                    color: Colors.black87,
+                    size: Size(18, 14),
+                    position: PointerPosition.start,
+                  ),
+                  rulerStyle: RulerStyle.majorTicks,
+                  animation: true,
+                ),
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('Vertical Orientation'),
+          _buildExampleCard(
+            'Vertical Linear Gauge',
+            Center(
+              child: SizedBox(
+                height: 200,
+                width: 100,
+                child: LinearGaugeIndicator(
+                  value: _value,
+                  orientation: LinearGaugeOrientation.vertical,
+                  thickness: 20,
+                  backgroundColor: Colors.grey.shade300,
+                  rulerStyle: RulerStyle.ticksWithLabels,
+                  majorDivisions: 5,
+                  valueBar: LinearValueBar(
+                    gradient: const LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [Colors.blue, Colors.cyan],
+                    ),
+                  ),
+                  pointer: const LinearGaugePointer(
+                    type: LinearPointerType.triangle,
+                    color: Colors.red,
+                    size: Size(16, 12),
+                    position: PointerPosition.end,
+                  ),
+                  animation: true,
+                ),
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('Interactive Gauge'),
+          _buildExampleCard(
+            'Drag to Change Value',
+            Center(
+              child: SizedBox(
+                width: double.infinity,
+                height: 80,
+                child: LinearGaugeIndicator(
+                  value: _value,
+                  thickness: 24,
+                  backgroundColor: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(12),
+                  pointer: const LinearGaugePointer(
+                    type: LinearPointerType.circle,
+                    color: Colors.teal,
+                    size: Size(24, 24),
+                    position: PointerPosition.center,
+                    hasShadow: true,
+                  ),
+                  valueBar: const LinearValueBar(
+                    color: Colors.teal,
+                  ),
+                  interactive: true,
+                  onValueChanged: (value) {
+                    setState(() => _value = value);
+                  },
+                  animation: false,
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+          _buildSlider(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSlider() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Text(
+              'Adjust Value: ${(_value * 100).toInt()}%',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            Slider(
+              value: _value,
+              min: 0,
+              max: 1,
+              divisions: 100,
+              onChanged: (value) {
+                setState(() => _value = value);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+    );
+  }
+
+  Widget _buildExampleCard(String title, Widget child) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, style: Theme.of(context).textTheme.bodyMedium),
+            const SizedBox(height: 12),
+            child,
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Examples of radial gauge indicators
+class RadialGaugeExamples extends StatefulWidget {
+  /// Creates the radial gauge examples widget.
+  const RadialGaugeExamples({super.key});
+
+  @override
+  State<RadialGaugeExamples> createState() => _RadialGaugeExamplesState();
+}
+
+class _RadialGaugeExamplesState extends State<RadialGaugeExamples> {
+  double _value = 0.65;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionTitle('Basic Radial Gauge'),
+          _buildExampleCard(
+            'Three-Quarter Gauge',
+            Center(
+              child: RadialGaugeIndicator(
+                value: _value,
+                size: 200,
+                position: RadialGaugePosition.threeQuarter,
+                thickness: 15,
+                backgroundColor: Colors.grey.shade300,
+                valueBar: const RadialValueBar(
+                  color: Colors.blue,
+                  thickness: 15,
+                ),
+                showValue: true,
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('Needle Pointer'),
+          _buildExampleCard(
+            'Tapered Needle Style',
+            Center(
+              child: RadialGaugeIndicator(
+                value: _value,
+                size: 220,
+                position: RadialGaugePosition.threeQuarter,
+                thickness: 20,
+                backgroundColor: Colors.grey.shade200,
+                needlePointer: const RadialNeedlePointer(
+                  type: NeedlePointerType.tapered,
+                  length: 0.7,
+                  width: 12,
+                  color: Colors.red,
+                  knobRadius: 14,
+                  knobColor: Colors.red,
+                  hasShadow: true,
+                ),
+                showTicks: true,
+                majorTickCount: 10,
+                showLabels: true,
+                showValue: true,
+                animation: true,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildExampleCard(
+            'Triangle Needle with Tail',
+            Center(
+              child: RadialGaugeIndicator(
+                value: _value,
+                size: 200,
+                position: RadialGaugePosition.threeQuarter,
+                thickness: 15,
+                backgroundColor: Colors.grey.shade300,
+                needlePointer: const RadialNeedlePointer(
+                  type: NeedlePointerType.triangle,
+                  length: 0.65,
+                  width: 10,
+                  color: Colors.black87,
+                  knobRadius: 10,
+                  knobColor: Colors.black87,
+                  showTail: true,
+                  tailLength: 0.25,
+                  hasShadow: true,
+                ),
+                showValue: true,
+                animation: true,
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('Shape Pointer'),
+          _buildExampleCard(
+            'Circle Shape Pointer',
+            Center(
+              child: RadialGaugeIndicator(
+                value: _value,
+                size: 200,
+                position: RadialGaugePosition.threeQuarter,
+                thickness: 20,
+                backgroundColor: Colors.grey.shade300,
+                shapePointer: const RadialShapePointer(
+                  type: ShapePointerType.circle,
+                  size: Size(20, 20),
+                  color: Colors.orange,
+                  elevation: 4,
+                ),
+                valueBar: RadialValueBar(
+                  gradient: const SweepGradient(
+                    startAngle: 2.35,
+                    endAngle: 7.0,
+                    colors: [Colors.green, Colors.orange],
+                  ),
+                  thickness: 20,
+                ),
+                showValue: true,
+                animation: true,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildExampleCard(
+            'Diamond Shape Pointer',
+            Center(
+              child: RadialGaugeIndicator(
+                value: _value,
+                size: 200,
+                position: RadialGaugePosition.halfTop,
+                thickness: 18,
+                backgroundColor: Colors.grey.shade300,
+                shapePointer: const RadialShapePointer(
+                  type: ShapePointerType.diamond,
+                  size: Size(18, 18),
+                  color: Colors.purple,
+                  offset: 25,
+                  elevation: 3,
+                ),
+                valueBar: const RadialValueBar(
+                  color: Colors.purple,
+                  thickness: 18,
+                ),
+                showValue: true,
+                animation: true,
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('Radial Value Bar'),
+          _buildExampleCard(
+            'Gradient Value Bar',
+            Center(
+              child: RadialGaugeIndicator(
+                value: _value,
+                size: 200,
+                position: RadialGaugePosition.threeQuarter,
+                thickness: 12,
+                backgroundColor: Colors.grey.shade200,
+                valueBar: RadialValueBar(
+                  gradient: const SweepGradient(
+                    startAngle: 2.35,
+                    endAngle: 7.0,
+                    colors: [Colors.green, Colors.yellow, Colors.orange, Colors.red],
+                  ),
+                  thickness: 20,
+                  strokeCap: StrokeCap.round,
+                ),
+                showTicks: true,
+                majorTickCount: 8,
+                showValue: true,
+                animation: true,
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('Range Gauge'),
+          _buildExampleCard(
+            'With Colored Ranges',
+            Center(
+              child: RadialGaugeIndicator(
+                value: _value,
+                size: 220,
+                position: RadialGaugePosition.threeQuarter,
+                thickness: 8,
+                backgroundColor: Colors.transparent,
+                ranges: const [
+                  RadialGaugeRange(start: 0.0, end: 0.33, color: Colors.green, thickness: 20),
+                  RadialGaugeRange(start: 0.33, end: 0.66, color: Colors.orange, thickness: 20),
+                  RadialGaugeRange(start: 0.66, end: 1.0, color: Colors.red, thickness: 20),
+                ],
+                needlePointer: const RadialNeedlePointer(
+                  type: NeedlePointerType.flat,
+                  length: 0.6,
+                  width: 8,
+                  color: Colors.black87,
+                  knobRadius: 8,
+                  knobColor: Colors.black87,
+                  hasShadow: true,
+                ),
+                showValue: true,
+                valueFormatter: (v) {
+                  if (v < 0.33) return 'Low';
+                  if (v < 0.66) return 'Normal';
+                  return 'High';
+                },
+                animation: true,
+              ),
+            ),
+          ),
+
+          _buildSectionTitle('Different Positions'),
+          _buildExampleCard(
+            'Half Top & Half Bottom',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(
+                  children: [
+                    RadialGaugeIndicator(
+                      value: _value,
+                      size: 120,
+                      position: RadialGaugePosition.halfTop,
+                      thickness: 12,
+                      backgroundColor: Colors.grey.shade300,
+                      valueBar: const RadialValueBar(
+                        color: Colors.blue,
+                        thickness: 12,
+                      ),
+                    ),
+                    const Text('Half Top'),
+                  ],
+                ),
+                Column(
+                  children: [
+                    RadialGaugeIndicator(
+                      value: _value,
+                      size: 120,
+                      position: RadialGaugePosition.halfBottom,
+                      thickness: 12,
+                      backgroundColor: Colors.grey.shade300,
+                      valueBar: const RadialValueBar(
+                        color: Colors.green,
+                        thickness: 12,
+                      ),
+                    ),
+                    const Text('Half Bottom'),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          _buildSectionTitle('Interactive Gauge'),
+          _buildExampleCard(
+            'Drag to Change Value',
+            Center(
+              child: RadialGaugeIndicator(
+                value: _value,
+                size: 200,
+                position: RadialGaugePosition.threeQuarter,
+                thickness: 20,
+                backgroundColor: Colors.grey.shade300,
+                shapePointer: const RadialShapePointer(
+                  type: ShapePointerType.circle,
+                  size: Size(24, 24),
+                  color: Colors.teal,
+                  elevation: 4,
+                ),
+                valueBar: const RadialValueBar(
+                  color: Colors.teal,
+                  thickness: 20,
+                ),
+                interactive: true,
+                onValueChanged: (value) {
+                  setState(() => _value = value);
+                },
+                showValue: true,
+              ),
             ),
           ),
 
