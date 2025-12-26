@@ -77,6 +77,7 @@ class DotsIndicator extends StatelessWidget {
   ///
   /// The [dotsCount] must be greater than 0.
   /// The [position] must be >= 0 and < [dotsCount].
+  // ignore: sort_constructors_first
   const DotsIndicator({
     super.key,
     required this.dotsCount,

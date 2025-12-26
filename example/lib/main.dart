@@ -5,7 +5,9 @@ void main() {
   runApp(const MyApp());
 }
 
+/// The main application widget.
 class MyApp extends StatelessWidget {
+  /// Creates the main application widget.
   const MyApp({super.key});
 
   @override
@@ -22,7 +24,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
+/// The main examples page that displays different progress bar examples.
 class ExamplesPage extends StatefulWidget {
+  /// Creates the examples page widget.
   const ExamplesPage({super.key});
 
   @override
@@ -77,6 +81,7 @@ class _ExamplesPageState extends State<ExamplesPage> {
 
 /// Examples of linear progress bars
 class LinearProgressExamples extends StatefulWidget {
+  /// Creates the linear progress examples widget.
   const LinearProgressExamples({super.key});
 
   @override
@@ -243,6 +248,7 @@ class _LinearProgressExamplesState extends State<LinearProgressExamples> {
 
 /// Examples of dots progress indicators
 class DotsProgressExamples extends StatefulWidget {
+  /// Creates the dots progress examples widget.
   const DotsProgressExamples({super.key});
 
   @override
@@ -425,6 +431,7 @@ class _DotsProgressExamplesState extends State<DotsProgressExamples> {
 
 /// Examples of titled progress bars
 class TitledProgressExamples extends StatefulWidget {
+  /// Creates the titled progress examples widget.
   const TitledProgressExamples({super.key});
 
   @override
@@ -615,6 +622,7 @@ class _TitledProgressExamplesState extends State<TitledProgressExamples> {
 
 /// Examples of animated progress bars
 class AnimatedProgressExamples extends StatefulWidget {
+  /// Creates the animated progress examples widget.
   const AnimatedProgressExamples({super.key});
 
   @override

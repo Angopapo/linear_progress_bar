@@ -15,7 +15,8 @@ String _jsonEncodeTitled(dynamic value) {
     final entries = value.entries.map((e) => '"${e.key}":${_jsonEncodeTitled(e.value)}').join(',');
     return '{$entries}';
   } else if (value is String) {
-    return '"${value.replaceAll('"', '\\"')}"';
+    final escaped = value.replaceAll('"', r'\"');
+    return '"$escaped"';
   } else {
     return value.toString();
   }
@@ -164,6 +165,7 @@ class TitledProgressBar extends StatelessWidget {
   final int percentageDecimals;
 
   /// Creates a titled progress bar widget.
+  // ignore: sort_constructors_first
   const TitledProgressBar({
     super.key,
     this.progressColor = Colors.red,

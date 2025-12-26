@@ -455,7 +455,9 @@ void main() {
 
   group('Static field backward compatibility', () {
     test('should access deprecated static fields', () {
+      // ignore: deprecated_member_use_from_same_package
       expect(LinearProgressBar.progressTypeLinear, 1);
+      // ignore: deprecated_member_use_from_same_package
       expect(LinearProgressBar.progressTypeDots, 2);
     });
   });

@@ -64,6 +64,7 @@ class DotsDecorator {
   /// Creates a dots decorator configuration.
   ///
   /// All parameters are optional and will use sensible defaults if not provided.
+  // ignore: sort_constructors_first
   const DotsDecorator({
     this.color,
     this.activeColor,

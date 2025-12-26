@@ -16,7 +16,8 @@ String _jsonEncode(dynamic value) {
     final entries = value.entries.map((e) => '"${e.key}":${_jsonEncode(e.value)}').join(',');
     return '{$entries}';
   } else if (value is String) {
-    return '"${value.replaceAll('"', '\\"')}"';
+    final escaped = value.replaceAll('"', r'\"');
+    return '"$escaped"';
   } else {
     return value.toString();
   }
@@ -173,6 +174,7 @@ class LinearProgressBar extends StatelessWidget {
   ///
   /// The [maxSteps] must be greater than 0.
   /// The [currentStep] must be between 0 and [maxSteps].
+  // ignore: sort_constructors_first
   const LinearProgressBar({
     super.key,
     this.progressColor = Colors.red,

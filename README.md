@@ -31,7 +31,7 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  linear_progress_bar: ^2.0.0+1
+  linear_progress_bar: ^2.0.0+2
 ```
 
 Then run:
